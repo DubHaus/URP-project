@@ -1,0 +1,23 @@
+{
+    "name": "Project.ConnectionManagment",
+    "rootNamespace": "",
+    "references": [
+        "Unity.Netcode.Runtime",
+        "VContainer",
+        "VContainer.EnableCodeGen",
+        "Unity.Services.Authentication",
+        "Unity.Services.Core",
+        "Unity.Services.Relay",
+        "Project.Utils",
+        "Unity.Networking.Transport"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

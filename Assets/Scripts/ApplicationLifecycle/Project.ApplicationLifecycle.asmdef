@@ -1,0 +1,21 @@
+{
+    "name": "Project.ApplicationLifecycle",
+    "rootNamespace": "",
+    "references": [
+        "VContainer",
+        "VContainer.EnableCodeGen",
+        "Unity.Netcode.Runtime",
+        "Project.ConnectionManagment",
+        "Project.Gameplay",
+        "Project.UnityServices"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
