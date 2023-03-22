@@ -16,6 +16,13 @@ namespace Project.Gameplay.GameplayObjects.Character {
             agent = GetComponent<NavMeshAgent>();
         }
 
+        private void Update()
+        {
+            if(!IsOwner) {
+                AgoraVoiceController.Instance.UpdateSpatialAudioPosition(transform.position);
+            }
+        }
+
         public override void OnNetworkSpawn() {
             base.OnNetworkSpawn();
             if (IsOwner) {
@@ -32,7 +39,7 @@ namespace Project.Gameplay.GameplayObjects.Character {
 
         public void Move(Vector3 targetPosition) {
             if (IsOwner) {
-                AgoraVoiceController.Instance.UpdateSpatialAudioPosition(targetPosition);
+                agent.SetDestination(targetPosition);
             }
         }
 

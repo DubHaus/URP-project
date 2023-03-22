@@ -660,6 +660,7 @@ MonoBehaviour:
   _appID: 9e59f51bf0ba4b208502f338d3ef4dc3
   _channelName: unity
   _token: 007eJxTYLh3xEhaeqe4u2qnUNvdI18ztix+4Zh4afpFv/17f175tIhPgcEy1dQyzdQwKc0gKdEkycjAwtTAKM3Y2CLFODXNJCXZmPGMZEpDICNDUv8qRkYGCATxWRlK8zJLKhkYAPaCIbQ=
+  remoteUid: 0
 --- !u!4 &1120412260
 Transform:
   m_ObjectHideFlags: 0

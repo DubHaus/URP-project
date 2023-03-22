@@ -4,6 +4,7 @@ using UnityEngine;
 using Agora;
 using Agora.Rtc;
 
+
 namespace Project.VoiceChatUtils {
     public class AgoraVoiceController : MonoBehaviour {
 
@@ -13,7 +14,7 @@ namespace Project.VoiceChatUtils {
         [SerializeField] string _channelName;
         [SerializeField] string _token;
 
-        private uint remoteUid;
+        public uint remoteUid;
         private ILocalSpatialAudioEngine localSpatial;
         internal IRtcEngine RtcEngine;
 
@@ -32,12 +33,6 @@ namespace Project.VoiceChatUtils {
             SetupVoiceSDKEngine();
             ConfigureSpatialAudioEngine();
             InitEventHandler();
-        }
-
-        void OnApplicationQuit() {
-            Leave();
-            RtcEngine.Dispose();
-            RtcEngine = null;
         }
 
         private void SetupVoiceSDKEngine() {
@@ -64,10 +59,10 @@ namespace Project.VoiceChatUtils {
             //By default Agora subscribes to the audio streams of all remote users.
             //Unsubscribe all remote users; otherwise, the audio reception range you set
             //is invalid.
-            localSpatial.MuteLocalAudioStream(true);
-            localSpatial.MuteAllRemoteAudioStreams(true);
+            //localSpatial.MuteLocalAudioStream(true);
+            //localSpatial.MuteAllRemoteAudioStreams(true);
 
-            localSpatial.SetAudioRecvRange(50);
+            localSpatial.SetAudioRecvRange(20);
             localSpatial.SetDistanceUnit(1);
 
             float[] position = new float[] { 0.0f, 0.0f, 0.0f };
@@ -78,17 +73,17 @@ namespace Project.VoiceChatUtils {
             localSpatial.UpdateSelfPosition(position, axisForward, axisRight, axisUp);
         }
 
-        public void UpdateSpatialAudioPosition(Vector3 sourceDistance) {
-            float[] position = new float[] { sourceDistance.z, 4.0f, 0.0f };
-            float[] forward = new float[] { sourceDistance.z, 0.0f, 0.0f };
-            RemoteVoicePositionInfo remotePosInfo = new RemoteVoicePositionInfo(position, forward);
-            localSpatial.UpdateRemotePosition((uint)remoteUid, remotePosInfo);
-        }
-
         public void Join() {
             RtcEngine.EnableAudio();
             RtcEngine.SetClientRole(CLIENT_ROLE_TYPE.CLIENT_ROLE_BROADCASTER);
             RtcEngine.JoinChannel(_token, _channelName);
+        }
+
+        public void UpdateSpatialAudioPosition(Vector3 sourceDistance) {
+            float[] position = new float[] { sourceDistance.z, sourceDistance.x, sourceDistance.y };
+            float[] forward = new float[] { sourceDistance.z, 0.0f, 0.0f };
+            RemoteVoicePositionInfo remotePosInfo = new RemoteVoicePositionInfo(position, forward);
+            localSpatial.UpdateRemotePosition((uint)remoteUid, remotePosInfo);
         }
 
         public void Leave() {
@@ -96,9 +91,14 @@ namespace Project.VoiceChatUtils {
             RtcEngine.DisableAudio();
         }
 
+        private void OnDestroy() {
+            Leave();
+            RtcEngine.Dispose();
+            RtcEngine = null;
+        }
+
 
     }
-
     internal class UserEventHandler : IRtcEngineEventHandler {
         private readonly AgoraVoiceController _audioSample;
 
@@ -108,8 +108,21 @@ namespace Project.VoiceChatUtils {
 
         // This callback is triggered when the local user joins the channel.
         public override void OnJoinChannelSuccess(RtcConnection connection, int elapsed) {
-            Debug.Log("User joined audio channel");
-            Debug.Log(connection);
+            Debug.Log("Local user join channel " + connection.localUid);
+        }
+
+        public override void OnUserJoined(RtcConnection connection, uint remoteUid, int elapsed) {
+            Debug.Log("Remote user joined " + remoteUid);
+            AgoraVoiceController.Instance.remoteUid = remoteUid;
+        }
+
+        public override void OnLeaveChannel(RtcConnection connection, RtcStats stats) {
+            Debug.Log("User left audio channel, with duration" + stats.duration);
+        }
+
+        public override void OnError(int err, string msg) {
+            Debug.LogError("Error with Agora: " + msg);
         }
     }
+
 }
