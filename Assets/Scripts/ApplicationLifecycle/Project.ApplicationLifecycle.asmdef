@@ -7,7 +7,8 @@
         "Unity.Netcode.Runtime",
         "Project.ConnectionManagment",
         "Project.Gameplay",
-        "Project.UnityServices"
+        "Project.UnityServices",
+        "Project.Utils"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

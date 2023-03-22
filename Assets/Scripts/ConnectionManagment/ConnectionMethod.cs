@@ -76,6 +76,7 @@ namespace Project.ConnectionManagment {
             Debug.Log($"server: connection data: {hostAllocation.ConnectionData[0]} {hostAllocation.ConnectionData[1]}, " +
                 $"allocation ID:{hostAllocation.AllocationId}, region:{hostAllocation.Region}");
             Debug.Log($"JOIN CODE: {joinCode}");
+            m_ConnectionManager.joinCode = joinCode;
 
 
             var utp = (UnityTransport)m_ConnectionManager.NetworkManager.NetworkConfig.NetworkTransport;

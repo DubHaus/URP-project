@@ -9,7 +9,8 @@
         "Unity.Services.Core",
         "Unity.Services.Relay",
         "Project.Utils",
-        "Unity.Networking.Transport"
+        "Unity.Networking.Transport",
+        "Project.VoiceChatUtils"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

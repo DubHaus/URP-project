@@ -539,7 +539,7 @@ PlayerSettings:
   enableCrashReportAPI: 0
   cameraUsageDescription: 
   locationUsageDescription: 
-  microphoneUsageDescription: 
+  microphoneUsageDescription: ADVENTURER HELP, I NEED YOUR AID
   bluetoothUsageDescription: 
   switchNMETAOverride: 
   switchNetLibKey: 

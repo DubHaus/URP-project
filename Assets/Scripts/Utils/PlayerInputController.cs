@@ -84,7 +84,6 @@ namespace Project.Utils.Input {
                     Vector3 targetPosition = GetWorldPosition(currentTouchPosition);
                     Vector3 direction = GetWorldPosition(valueOfLastTouchPosition) - targetPosition;
                     direction.y = 0;
-                    // freeCameraSystem.Move(direction);
                     OnSwipe?.Invoke(direction);
                 }
                 lastPrimaryTouchPosition = currentTouchPosition;

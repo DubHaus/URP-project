@@ -4,7 +4,10 @@
     "references": [
         "Project.ConnectionManagment",
         "VContainer",
-        "Project.UnityServices"
+        "Project.UnityServices",
+        "Unity.Netcode.Runtime",
+        "Project.Utils",
+        "Project.VoiceChatUtils"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

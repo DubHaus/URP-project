@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using Project.Utils.Input;
+using VContainer;
 
 public class FreeCameraSystem : MonoBehaviour
 {
@@ -10,7 +11,6 @@ public class FreeCameraSystem : MonoBehaviour
     [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
     [SerializeField] private float minFollowOffset = 10f;
     [SerializeField] private float maxFollowOffset = 50f;
-    //[SerializeField] private PlayerInputController playerInputController;
 
     private Vector3 followOffset;
 

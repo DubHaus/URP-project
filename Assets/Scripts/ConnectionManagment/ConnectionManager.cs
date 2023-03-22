@@ -25,6 +25,7 @@ namespace Project.ConnectionManagment {
         public NetworkManager NetworkManager => m_NetworkManager;
 
         public int MaxConnectedPlayer = 8;
+        public string joinCode;
 
         internal readonly OfflineState m_OfflineState = new OfflineState();
         internal readonly ClientConnectingState m_ClientConnectingState = new ClientConnectingState();
@@ -61,6 +62,7 @@ namespace Project.ConnectionManagment {
         }
 
         void OnClientConnectedCallback(ulong clientId) {
+            m_CurrentState.OnClientConnected(clientId);
         }
 
         void OnClientDisconnectCallback(ulong clientId) {
