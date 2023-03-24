@@ -11,8 +11,9 @@ namespace Project.ConnectionManagment {
 
         public abstract void Enter();
         public abstract void Exit();
-        public virtual void StartClient(string playerName, string joinCode) { }
-        public virtual void StartHost(string playerName) { }
+        public virtual void StartClient(string playerName, string joinCode, uint characterHash) { }
+        public virtual void StartHost(string playerName, uint characterHash) { }
+        public virtual void StartGame() { }
         public virtual void OnClientConnected(ulong clientId) { }
         public virtual void OnServerStarted() { }
 

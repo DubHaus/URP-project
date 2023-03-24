@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.EventSystems;
 
 
 namespace Project.Utils.Input {
@@ -77,7 +78,7 @@ namespace Project.Utils.Input {
         }
 
         private void PrimarySwipeHandler(InputAction.CallbackContext context) {
-            if (currentAction == Action.swipe) {
+            if (!EventSystem.current.IsPointerOverGameObject() & currentAction == Action.swipe) {
                 Vector2 currentTouchPosition = playerInputControls.Touch.PrimaryTouchPosition.ReadValue<Vector2>();
 
                 if (lastPrimaryTouchPosition is Vector2 valueOfLastTouchPosition) {
@@ -92,7 +93,7 @@ namespace Project.Utils.Input {
         }
 
         private void PrimaryTouchHandler(InputAction.CallbackContext context) {
-            if (currentAction == Action.touch) {
+            if (!EventSystem.current.IsPointerOverGameObject() & currentAction == Action.touch) {
                 Vector2 currentMovementInput = playerInputControls.Touch.PrimaryTouchPosition.ReadValue<Vector2>();
                 OnTouch2D?.Invoke(currentMovementInput);
                 OnTouch?.Invoke(GetWorldPosition(currentMovementInput));
@@ -101,7 +102,7 @@ namespace Project.Utils.Input {
         }
 
         private void ZoomHandler(InputAction.CallbackContext context) {
-            if (currentAction == Action.zoom) {
+            if (!EventSystem.current.IsPointerOverGameObject() & currentAction == Action.zoom) {
                 float fingersDistance = Vector2.Distance(
                     playerInputControls.Touch.PrimaryTouchPosition.ReadValue<Vector2>(),
                     playerInputControls.Touch.SecondaryTouchPosition.ReadValue<Vector2>()
@@ -119,10 +120,14 @@ namespace Project.Utils.Input {
         }
 
         private Vector3 GetWorldPosition(Vector2 screenPosition) {
-            RaycastHit hit;
 
             float maxDistance = 100;
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(screenPosition), out hit, maxDistance)) {
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(screenPosition), out RaycastHit hit, maxDistance)) {
+                Debug.Log(hit.transform.gameObject);
+                Debug.Log("LAYER " + hit.transform.gameObject.layer + "; " + LayerMask.GetMask("UI"));
+                if (hit.transform.gameObject.layer == LayerMask.GetMask("UI")) {
+                    Debug.Log("CLICK ON UI");
+                }
                 return hit.point;
             }
             return Vector3.zero;

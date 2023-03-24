@@ -4,7 +4,8 @@ using VContainer.Unity;
 
 namespace Project.Gameplay.GameState {
     public enum GameState {
-        MainMenu
+        MainMenu,
+        CharacterSelect
     }
 
     public abstract class GameStateBehaviour : LifetimeScope {

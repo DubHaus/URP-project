@@ -1,14 +1,10 @@
 {
-    "name": "Project.Gameplay",
+    "name": "Project.CameraUtils",
     "rootNamespace": "",
     "references": [
-        "Project.ConnectionManagment",
         "VContainer",
-        "Project.UnityServices",
-        "Unity.Netcode.Runtime",
         "Project.Utils",
-        "Project.VoiceChatUtils",
-        "Project.CameraUtils"
+        "Cinemachine"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

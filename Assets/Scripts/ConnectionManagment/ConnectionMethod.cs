@@ -17,20 +17,20 @@ namespace Project.ConnectionManagment {
         protected ConnectionManager m_ConnectionManager;
         protected readonly string m_PlayerName;
 
-        public abstract Task SetupHostConnectionAsync();
-        public abstract Task SetupClientConnectionAsync(string joinCode);
+        public abstract Task SetupHostConnectionAsync(uint characterHash);
+        public abstract Task SetupClientConnectionAsync(string joinCode, uint characterHash);
 
         public ConnectionMethod(ConnectionManager connectionManager, string playerName) {
             m_ConnectionManager = connectionManager;
             m_PlayerName = playerName;
         }
 
-        protected void SetConnectionPayload(string playerId, string playerName) {
+        protected void SetConnectionPayload(string playerId, string playerName, uint characterHash) {
             var payload = JsonUtility.ToJson(
                 new ConnectionPayload() {
                     playerId = playerId,
                     playerName = playerName,
-                    isDebug = Debug.isDebugBuild,
+                    characterHash = characterHash,
                 }
             );
 
@@ -54,10 +54,10 @@ namespace Project.ConnectionManagment {
             : base(connectionManager, playerName) {
         }
 
-        public override async Task SetupClientConnectionAsync(string joinCode) {
+        public override async Task SetupClientConnectionAsync(string joinCode, uint characterHash) {
             Debug.Log("Setting up Unity Relay client");
 
-            SetConnectionPayload(GetPlayerId(), m_PlayerName);
+            SetConnectionPayload(GetPlayerId(), m_PlayerName, characterHash);
 
             Debug.Log($"Setting Unity Relay client with join code {joinCode}");
 
@@ -66,10 +66,10 @@ namespace Project.ConnectionManagment {
             utp.SetRelayServerData(new RelayServerData(joinAllocation, OnlineState.k_DtlsConnType));
         }
 
-        public override async Task SetupHostConnectionAsync() {
+        public override async Task SetupHostConnectionAsync(uint characterHash) {
             Debug.Log("Setting up Unity Relay host");
 
-            SetConnectionPayload(GetPlayerId(), m_PlayerName);
+            SetConnectionPayload(GetPlayerId(), m_PlayerName, characterHash);
 
             Allocation hostAllocation = await RelayService.Instance.CreateAllocationAsync(m_ConnectionManager.MaxConnectedPlayer, region: null);
             var joinCode = await RelayService.Instance.GetJoinCodeAsync(hostAllocation.AllocationId);

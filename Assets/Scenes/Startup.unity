@@ -344,9 +344,24 @@ MonoBehaviour:
   NetworkConfig:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 729215779}
-    PlayerPrefab: {fileID: 943816055935623776, guid: c29e61147f7724e4381dea3c865e5df0,
-      type: 3}
-    NetworkPrefabs: []
+    PlayerPrefab: {fileID: 0}
+    NetworkPrefabs:
+    - Override: 2
+      Prefab: {fileID: 943816055935623776, guid: c29e61147f7724e4381dea3c865e5df0,
+        type: 3}
+      SourcePrefabToOverride: {fileID: 943816055935623776, guid: c29e61147f7724e4381dea3c865e5df0,
+        type: 3}
+      SourceHashToOverride: 11
+      OverridingTargetPrefab: {fileID: 943816055935623776, guid: c29e61147f7724e4381dea3c865e5df0,
+        type: 3}
+    - Override: 2
+      Prefab: {fileID: 943816055935623776, guid: 7de68d36db1a44aadaf2ecd910a2fe3e,
+        type: 3}
+      SourcePrefabToOverride: {fileID: 943816055935623776, guid: 7de68d36db1a44aadaf2ecd910a2fe3e,
+        type: 3}
+      SourceHashToOverride: 22
+      OverridingTargetPrefab: {fileID: 943816055935623776, guid: 7de68d36db1a44aadaf2ecd910a2fe3e,
+        type: 3}
     TickRate: 30
     ClientConnectionBufferTimeout: 10
     ConnectionApproval: 0
@@ -659,7 +674,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _appID: 9e59f51bf0ba4b208502f338d3ef4dc3
   _channelName: unity
-  _token: 007eJxTYLh3xEhaeqe4u2qnUNvdI18ztix+4Zh4afpFv/17f175tIhPgcEy1dQyzdQwKc0gKdEkycjAwtTAKM3Y2CLFODXNJCXZmPGMZEpDICNDUv8qRkYGCATxWRlK8zJLKhkYAPaCIbQ=
+  _token: 007eJxTYHCeaPG/Vr/k3aGSl2F8Boeuv3q0VD3szW9+xt5HBoc8zI4qMFimmlqmmRompRkkJZokGRlYmBoYpRkbW6QYp6aZpCQbLw6VSWkIZGTIjs5mYWSAQBCflaE0L7OkkoEBAM/JILA=
   remoteUid: 0
 --- !u!4 &1120412260
 Transform:

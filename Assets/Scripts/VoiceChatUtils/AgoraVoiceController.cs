@@ -86,6 +86,10 @@ namespace Project.VoiceChatUtils {
             localSpatial.UpdateRemotePosition((uint)remoteUid, remotePosInfo);
         }
 
+        public void Mute(bool mute) {
+            RtcEngine.MuteLocalAudioStream(mute);
+        }
+
         public void Leave() {
             RtcEngine.LeaveChannel();
             RtcEngine.DisableAudio();

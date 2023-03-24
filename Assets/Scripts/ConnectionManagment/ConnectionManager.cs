@@ -10,7 +10,7 @@ namespace Project.ConnectionManagment {
     public class ConnectionPayload {
         public string playerId;
         public string playerName;
-        public bool isDebug;
+        public uint characterHash;
     };
 
     public class ConnectionManager : MonoBehaviour {
@@ -32,6 +32,7 @@ namespace Project.ConnectionManagment {
         internal readonly ClientConnectedState m_ClientConnectedState = new ClientConnectedState();
         internal readonly StartingHostState m_StartingHostState = new StartingHostState();
         internal readonly HostingState m_HostingState = new HostingState();
+        internal readonly SelectCharState m_SelectCharState = new SelectCharState();
 
         void Awake() {
             DontDestroyOnLoad(gameObject);
@@ -39,12 +40,13 @@ namespace Project.ConnectionManagment {
 
         void Start() {
             Debug.Log("START CONNECTION MANAGER");
-            List<ConnectionState> states = new() { m_OfflineState, m_ClientConnectingState, m_ClientConnectedState, m_ClientConnectedState, m_HostingState, m_StartingHostState };
-            foreach(var state in states) {
+            List<ConnectionState> states = new() { m_OfflineState, m_ClientConnectingState, m_ClientConnectedState, m_ClientConnectedState, m_HostingState, m_StartingHostState, m_SelectCharState };
+            foreach (var state in states) {
                 m_Resolver.Inject(state);
             }
 
             m_CurrentState = m_OfflineState;
+            NetworkManager.NetworkConfig.ConnectionApproval = true;
 
             NetworkManager.OnClientConnectedCallback += OnClientConnectedCallback;
             NetworkManager.OnClientDisconnectCallback += OnClientDisconnectCallback;
@@ -72,12 +74,16 @@ namespace Project.ConnectionManagment {
             m_CurrentState.OnServerStarted();
         }
 
-        public void StartHost(string playerName) {
-            m_CurrentState.StartHost(playerName);
+        public void StartHost(string playerName, uint characterHash) {
+            m_CurrentState.StartHost(playerName, characterHash);
         }
 
-        public void StartClient(string playerName, string joinCode) {
-            m_CurrentState.StartClient(playerName, joinCode);
+        public void StartClient(string playerName, string joinCode, uint characterHash) {
+            m_CurrentState.StartClient(playerName, joinCode, characterHash);
+        }
+
+        public void StartGame() {
+            m_CurrentState.StartGame();
         }
 
         public void ChangeState(ConnectionState nextState) {
