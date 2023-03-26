@@ -10,7 +10,8 @@ using UnityEngine.SceneManagement;
 namespace Project.ConnectionManagment {
     public class HostingState : ConnectionState {
         public override void Enter() {
-            m_ConnectionManager.NetworkManager.SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
+            m_ConnectionManager.NetworkManager.SceneManager.LoadScene("GLDScene", LoadSceneMode.Single);
+            //m_ConnectionManager.NetworkManager.SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
             Debug.Log("JOIN CODE: " + m_ConnectionManager.joinCode);
 
 
@@ -34,7 +35,7 @@ namespace Project.ConnectionManagment {
             response.Approved = true;
             response.CreatePlayerObject = true;
             response.PlayerPrefabHash = connectionPayload.characterHash;
-            response.Position = Vector3.zero;
+            response.Position = new Vector3(0, 3, 0);
             return;
         }
 

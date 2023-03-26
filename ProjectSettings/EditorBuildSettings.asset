@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CharacterSelect.unity
     guid: b6124c9f7a9b34035a2275ce67358bef
+  - enabled: 1
+    path: Assets/Scenes/GLDScene.unity
+    guid: 4f87f494a069f4519b4bc6fb2c5b3888
   m_configObjects: {}
