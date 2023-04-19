@@ -8,7 +8,8 @@
         "Unity.Netcode.Runtime",
         "Project.Utils",
         "Project.VoiceChatUtils",
-        "Project.CameraUtils"
+        "Project.CameraUtils",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

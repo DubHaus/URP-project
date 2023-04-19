@@ -73,6 +73,15 @@ namespace Project.Utils.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PrimarySwipeDeltaPointer"",
+                    ""type"": ""Value"",
+                    ""id"": ""528f211a-994c-4936-9df1-a70f9cb6b24b"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -130,17 +139,82 @@ namespace Project.Utils.Input
                     ""action"": ""SecondaryTouchPosition"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5f6aad87-6959-48ee-8a84-6b7bfefe0903"",
+                    ""path"": ""<Pointer>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PrimarySwipeDeltaPointer"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
         {
-            ""name"": ""New action map"",
+            ""name"": ""MouseKeyboard"",
             ""id"": ""7780af90-471c-4cb1-83e1-0c615ff481db"",
             ""actions"": [
                 {
-                    ""name"": ""New action"",
+                    ""name"": ""Scroll"",
+                    ""type"": ""Value"",
+                    ""id"": ""8be0e123-b42c-4a02-b08c-6245aa404acb"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Move"",
+                    ""type"": ""Value"",
+                    ""id"": ""9f9b9906-645b-4cf5-a9fe-17280df555b7"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""PointerPosition"",
+                    ""type"": ""Value"",
+                    ""id"": ""f2c8ca2d-35a9-48d5-a5f9-0cff51716149"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""SwipeDelta"",
+                    ""type"": ""Value"",
+                    ""id"": ""35155ceb-e3a5-4030-9032-cd1c044eea7d"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ClickContact"",
                     ""type"": ""Button"",
-                    ""id"": ""01d64285-c006-4877-894c-f71e4476efc9"",
+                    ""id"": ""41ede386-f314-46bc-bd48-a93fea33b812"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Rotate"",
+                    ""type"": ""Value"",
+                    ""id"": ""0cffec7d-8919-4cbf-b331-b512bd03c6ed"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""8e0c47d8-c7a7-417a-a8a9-b50b6fb3b253"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -150,12 +224,144 @@ namespace Project.Utils.Input
             ""bindings"": [
                 {
                     ""name"": """",
-                    ""id"": ""f8785172-ff3e-481b-8079-966a40265037"",
-                    ""path"": """",
+                    ""id"": ""d19a0f48-828f-4e55-9e3c-b55fdd5cdd79"",
+                    ""path"": ""<Mouse>/scroll"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""New action"",
+                    ""action"": ""Scroll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""cdd69d27-e7e4-4a45-a45e-127a716de129"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": ""NormalizeVector2"",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""ece3e4d5-226e-4b12-8f81-49e903d4e9ec"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""933ff8d6-d7ed-448f-9d50-044fd9ccf99b"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""19f6fea6-2b51-414d-a783-5dcceb51e5da"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""5b4ec864-e88f-4034-9e29-286a404f535c"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Move"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8f5794be-6e81-4ef5-8cb3-021dcd692155"",
+                    ""path"": ""<Pointer>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PointerPosition"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e35cdb84-a11a-43e6-8ca7-3a50dd477e03"",
+                    ""path"": ""<Pointer>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SwipeDelta"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4ee27640-3c79-4534-9009-8502aa4f83f9"",
+                    ""path"": ""<Pointer>/press"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ClickContact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""73b2b3ad-660d-4b14-94ed-24ebee600855"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""4e6716cb-4156-47e4-ae57-584cdf48ff06"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""cc5b61e1-056a-457f-bb3b-9d3d97a10a78"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""099070e5-7a7a-46ff-97cd-66d2ea37bc10"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -171,9 +377,16 @@ namespace Project.Utils.Input
             m_Touch_PrimarySwipeDelta = m_Touch.FindAction("PrimarySwipeDelta", throwIfNotFound: true);
             m_Touch_SecondaryTouchContact = m_Touch.FindAction("SecondaryTouchContact", throwIfNotFound: true);
             m_Touch_SecondaryTouchPosition = m_Touch.FindAction("SecondaryTouchPosition", throwIfNotFound: true);
-            // New action map
-            m_Newactionmap = asset.FindActionMap("New action map", throwIfNotFound: true);
-            m_Newactionmap_Newaction = m_Newactionmap.FindAction("New action", throwIfNotFound: true);
+            m_Touch_PrimarySwipeDeltaPointer = m_Touch.FindAction("PrimarySwipeDeltaPointer", throwIfNotFound: true);
+            // MouseKeyboard
+            m_MouseKeyboard = asset.FindActionMap("MouseKeyboard", throwIfNotFound: true);
+            m_MouseKeyboard_Scroll = m_MouseKeyboard.FindAction("Scroll", throwIfNotFound: true);
+            m_MouseKeyboard_Move = m_MouseKeyboard.FindAction("Move", throwIfNotFound: true);
+            m_MouseKeyboard_PointerPosition = m_MouseKeyboard.FindAction("PointerPosition", throwIfNotFound: true);
+            m_MouseKeyboard_SwipeDelta = m_MouseKeyboard.FindAction("SwipeDelta", throwIfNotFound: true);
+            m_MouseKeyboard_ClickContact = m_MouseKeyboard.FindAction("ClickContact", throwIfNotFound: true);
+            m_MouseKeyboard_Rotate = m_MouseKeyboard.FindAction("Rotate", throwIfNotFound: true);
+            m_MouseKeyboard_Interact = m_MouseKeyboard.FindAction("Interact", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -240,6 +453,7 @@ namespace Project.Utils.Input
         private readonly InputAction m_Touch_PrimarySwipeDelta;
         private readonly InputAction m_Touch_SecondaryTouchContact;
         private readonly InputAction m_Touch_SecondaryTouchPosition;
+        private readonly InputAction m_Touch_PrimarySwipeDeltaPointer;
         public struct TouchActions
         {
             private @PlayerInputControls m_Wrapper;
@@ -249,6 +463,7 @@ namespace Project.Utils.Input
             public InputAction @PrimarySwipeDelta => m_Wrapper.m_Touch_PrimarySwipeDelta;
             public InputAction @SecondaryTouchContact => m_Wrapper.m_Touch_SecondaryTouchContact;
             public InputAction @SecondaryTouchPosition => m_Wrapper.m_Touch_SecondaryTouchPosition;
+            public InputAction @PrimarySwipeDeltaPointer => m_Wrapper.m_Touch_PrimarySwipeDeltaPointer;
             public InputActionMap Get() { return m_Wrapper.m_Touch; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -273,6 +488,9 @@ namespace Project.Utils.Input
                 @SecondaryTouchPosition.started += instance.OnSecondaryTouchPosition;
                 @SecondaryTouchPosition.performed += instance.OnSecondaryTouchPosition;
                 @SecondaryTouchPosition.canceled += instance.OnSecondaryTouchPosition;
+                @PrimarySwipeDeltaPointer.started += instance.OnPrimarySwipeDeltaPointer;
+                @PrimarySwipeDeltaPointer.performed += instance.OnPrimarySwipeDeltaPointer;
+                @PrimarySwipeDeltaPointer.canceled += instance.OnPrimarySwipeDeltaPointer;
             }
 
             private void UnregisterCallbacks(ITouchActions instance)
@@ -292,6 +510,9 @@ namespace Project.Utils.Input
                 @SecondaryTouchPosition.started -= instance.OnSecondaryTouchPosition;
                 @SecondaryTouchPosition.performed -= instance.OnSecondaryTouchPosition;
                 @SecondaryTouchPosition.canceled -= instance.OnSecondaryTouchPosition;
+                @PrimarySwipeDeltaPointer.started -= instance.OnPrimarySwipeDeltaPointer;
+                @PrimarySwipeDeltaPointer.performed -= instance.OnPrimarySwipeDeltaPointer;
+                @PrimarySwipeDeltaPointer.canceled -= instance.OnPrimarySwipeDeltaPointer;
             }
 
             public void RemoveCallbacks(ITouchActions instance)
@@ -310,51 +531,99 @@ namespace Project.Utils.Input
         }
         public TouchActions @Touch => new TouchActions(this);
 
-        // New action map
-        private readonly InputActionMap m_Newactionmap;
-        private List<INewactionmapActions> m_NewactionmapActionsCallbackInterfaces = new List<INewactionmapActions>();
-        private readonly InputAction m_Newactionmap_Newaction;
-        public struct NewactionmapActions
+        // MouseKeyboard
+        private readonly InputActionMap m_MouseKeyboard;
+        private List<IMouseKeyboardActions> m_MouseKeyboardActionsCallbackInterfaces = new List<IMouseKeyboardActions>();
+        private readonly InputAction m_MouseKeyboard_Scroll;
+        private readonly InputAction m_MouseKeyboard_Move;
+        private readonly InputAction m_MouseKeyboard_PointerPosition;
+        private readonly InputAction m_MouseKeyboard_SwipeDelta;
+        private readonly InputAction m_MouseKeyboard_ClickContact;
+        private readonly InputAction m_MouseKeyboard_Rotate;
+        private readonly InputAction m_MouseKeyboard_Interact;
+        public struct MouseKeyboardActions
         {
             private @PlayerInputControls m_Wrapper;
-            public NewactionmapActions(@PlayerInputControls wrapper) { m_Wrapper = wrapper; }
-            public InputAction @Newaction => m_Wrapper.m_Newactionmap_Newaction;
-            public InputActionMap Get() { return m_Wrapper.m_Newactionmap; }
+            public MouseKeyboardActions(@PlayerInputControls wrapper) { m_Wrapper = wrapper; }
+            public InputAction @Scroll => m_Wrapper.m_MouseKeyboard_Scroll;
+            public InputAction @Move => m_Wrapper.m_MouseKeyboard_Move;
+            public InputAction @PointerPosition => m_Wrapper.m_MouseKeyboard_PointerPosition;
+            public InputAction @SwipeDelta => m_Wrapper.m_MouseKeyboard_SwipeDelta;
+            public InputAction @ClickContact => m_Wrapper.m_MouseKeyboard_ClickContact;
+            public InputAction @Rotate => m_Wrapper.m_MouseKeyboard_Rotate;
+            public InputAction @Interact => m_Wrapper.m_MouseKeyboard_Interact;
+            public InputActionMap Get() { return m_Wrapper.m_MouseKeyboard; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
             public bool enabled => Get().enabled;
-            public static implicit operator InputActionMap(NewactionmapActions set) { return set.Get(); }
-            public void AddCallbacks(INewactionmapActions instance)
+            public static implicit operator InputActionMap(MouseKeyboardActions set) { return set.Get(); }
+            public void AddCallbacks(IMouseKeyboardActions instance)
             {
-                if (instance == null || m_Wrapper.m_NewactionmapActionsCallbackInterfaces.Contains(instance)) return;
-                m_Wrapper.m_NewactionmapActionsCallbackInterfaces.Add(instance);
-                @Newaction.started += instance.OnNewaction;
-                @Newaction.performed += instance.OnNewaction;
-                @Newaction.canceled += instance.OnNewaction;
+                if (instance == null || m_Wrapper.m_MouseKeyboardActionsCallbackInterfaces.Contains(instance)) return;
+                m_Wrapper.m_MouseKeyboardActionsCallbackInterfaces.Add(instance);
+                @Scroll.started += instance.OnScroll;
+                @Scroll.performed += instance.OnScroll;
+                @Scroll.canceled += instance.OnScroll;
+                @Move.started += instance.OnMove;
+                @Move.performed += instance.OnMove;
+                @Move.canceled += instance.OnMove;
+                @PointerPosition.started += instance.OnPointerPosition;
+                @PointerPosition.performed += instance.OnPointerPosition;
+                @PointerPosition.canceled += instance.OnPointerPosition;
+                @SwipeDelta.started += instance.OnSwipeDelta;
+                @SwipeDelta.performed += instance.OnSwipeDelta;
+                @SwipeDelta.canceled += instance.OnSwipeDelta;
+                @ClickContact.started += instance.OnClickContact;
+                @ClickContact.performed += instance.OnClickContact;
+                @ClickContact.canceled += instance.OnClickContact;
+                @Rotate.started += instance.OnRotate;
+                @Rotate.performed += instance.OnRotate;
+                @Rotate.canceled += instance.OnRotate;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
             }
 
-            private void UnregisterCallbacks(INewactionmapActions instance)
+            private void UnregisterCallbacks(IMouseKeyboardActions instance)
             {
-                @Newaction.started -= instance.OnNewaction;
-                @Newaction.performed -= instance.OnNewaction;
-                @Newaction.canceled -= instance.OnNewaction;
+                @Scroll.started -= instance.OnScroll;
+                @Scroll.performed -= instance.OnScroll;
+                @Scroll.canceled -= instance.OnScroll;
+                @Move.started -= instance.OnMove;
+                @Move.performed -= instance.OnMove;
+                @Move.canceled -= instance.OnMove;
+                @PointerPosition.started -= instance.OnPointerPosition;
+                @PointerPosition.performed -= instance.OnPointerPosition;
+                @PointerPosition.canceled -= instance.OnPointerPosition;
+                @SwipeDelta.started -= instance.OnSwipeDelta;
+                @SwipeDelta.performed -= instance.OnSwipeDelta;
+                @SwipeDelta.canceled -= instance.OnSwipeDelta;
+                @ClickContact.started -= instance.OnClickContact;
+                @ClickContact.performed -= instance.OnClickContact;
+                @ClickContact.canceled -= instance.OnClickContact;
+                @Rotate.started -= instance.OnRotate;
+                @Rotate.performed -= instance.OnRotate;
+                @Rotate.canceled -= instance.OnRotate;
+                @Interact.started -= instance.OnInteract;
+                @Interact.performed -= instance.OnInteract;
+                @Interact.canceled -= instance.OnInteract;
             }
 
-            public void RemoveCallbacks(INewactionmapActions instance)
+            public void RemoveCallbacks(IMouseKeyboardActions instance)
             {
-                if (m_Wrapper.m_NewactionmapActionsCallbackInterfaces.Remove(instance))
+                if (m_Wrapper.m_MouseKeyboardActionsCallbackInterfaces.Remove(instance))
                     UnregisterCallbacks(instance);
             }
 
-            public void SetCallbacks(INewactionmapActions instance)
+            public void SetCallbacks(IMouseKeyboardActions instance)
             {
-                foreach (var item in m_Wrapper.m_NewactionmapActionsCallbackInterfaces)
+                foreach (var item in m_Wrapper.m_MouseKeyboardActionsCallbackInterfaces)
                     UnregisterCallbacks(item);
-                m_Wrapper.m_NewactionmapActionsCallbackInterfaces.Clear();
+                m_Wrapper.m_MouseKeyboardActionsCallbackInterfaces.Clear();
                 AddCallbacks(instance);
             }
         }
-        public NewactionmapActions @Newactionmap => new NewactionmapActions(this);
+        public MouseKeyboardActions @MouseKeyboard => new MouseKeyboardActions(this);
         public interface ITouchActions
         {
             void OnPrimaryTouchPosition(InputAction.CallbackContext context);
@@ -362,10 +631,17 @@ namespace Project.Utils.Input
             void OnPrimarySwipeDelta(InputAction.CallbackContext context);
             void OnSecondaryTouchContact(InputAction.CallbackContext context);
             void OnSecondaryTouchPosition(InputAction.CallbackContext context);
+            void OnPrimarySwipeDeltaPointer(InputAction.CallbackContext context);
         }
-        public interface INewactionmapActions
+        public interface IMouseKeyboardActions
         {
-            void OnNewaction(InputAction.CallbackContext context);
+            void OnScroll(InputAction.CallbackContext context);
+            void OnMove(InputAction.CallbackContext context);
+            void OnPointerPosition(InputAction.CallbackContext context);
+            void OnSwipeDelta(InputAction.CallbackContext context);
+            void OnClickContact(InputAction.CallbackContext context);
+            void OnRotate(InputAction.CallbackContext context);
+            void OnInteract(InputAction.CallbackContext context);
         }
     }
 }

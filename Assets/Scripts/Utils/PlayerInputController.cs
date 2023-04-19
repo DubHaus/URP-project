@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 namespace Project.Utils.Input {
 
-    public enum Action {
+    public enum CurrentAction {
         touch,
         swipe,
         zoom,
@@ -14,19 +14,25 @@ namespace Project.Utils.Input {
 
     public class PlayerInputController : MonoBehaviour {
         public static PlayerInputController Instance { get; private set; }
-        public event Action<Vector3> OnTouch;
-        public event Action<Vector2> OnTouch2D;
+        public event Action<Vector3> OnClick;
+        public event Action<Vector2> OnClick2D;
         public event Action<Vector3> OnSwipe;
-        public event Action<float> OnZoomIn;
-        public event Action<float> OnZoomOut;
+        public event Action OnZoomIn;
+        public event Action OnZoomOut;
+        public event Action<Vector2> OnMove;
+        public event Action<float> OnRotate;
+        public event Action OnInteract;
+        public event Action<Vector2> OnPoint;
 
         [SerializeField] private float zoomSensetifity;
-        [SerializeField] private float zoomAmount = 3f;
 
         private PlayerInputControls playerInputControls;
-        private Action? currentAction = null;
+        private CurrentAction? currentAction = null;
         private Vector2? lastPrimaryTouchPosition;
         private float fingersLastDistance;
+        private float rotation = 0;
+        private bool isMoving = false;
+        private Vector2 moveVector = Vector2.zero;
 
         private void Awake() {
 
@@ -41,18 +47,22 @@ namespace Project.Utils.Input {
 
             playerInputControls = new PlayerInputControls();
 
+            // Touch
             playerInputControls.Touch.PrimaryTouchContact.started += _ => {
-                currentAction = Action.touch;
+                Debug.Log("PrimaryTouchContact started");
+                currentAction = CurrentAction.touch;
                 lastPrimaryTouchPosition = playerInputControls.Touch.PrimaryTouchPosition.ReadValue<Vector2>();
             };
 
-            playerInputControls.Touch.PrimarySwipeDelta.started += _ => {
-                if (currentAction != Action.zoom) {
-                    currentAction = Action.swipe;
+            playerInputControls.Touch.PrimarySwipeDeltaPointer.started += _ => {
+                if (currentAction != CurrentAction.zoom) {
+                    if (playerInputControls.Touch.PrimaryTouchContact.ReadValue<float>() == 1) {
+                        currentAction = CurrentAction.swipe;
+                    }
                 }
             };
             playerInputControls.Touch.SecondaryTouchContact.started += _ => {
-                currentAction = Action.zoom;
+                currentAction = CurrentAction.zoom;
                 fingersLastDistance = Vector2.Distance(
                     playerInputControls.Touch.PrimaryTouchPosition.ReadValue<Vector2>(),
                     playerInputControls.Touch.SecondaryTouchPosition.ReadValue<Vector2>()
@@ -64,28 +74,61 @@ namespace Project.Utils.Input {
             };
 
             playerInputControls.Touch.PrimaryTouchContact.canceled += PrimaryTouchHandler;
-            playerInputControls.Touch.PrimarySwipeDelta.performed += PrimarySwipeHandler;
-            playerInputControls.Touch.SecondaryTouchPosition.performed += ZoomHandler;
+            playerInputControls.Touch.PrimarySwipeDeltaPointer.performed += PrimarySwipeHandler;
+            playerInputControls.Touch.SecondaryTouchPosition.performed += PinchHandler;
+
+            // Mouse
+            playerInputControls.MouseKeyboard.Scroll.performed += ScrollHandler;
+            playerInputControls.MouseKeyboard.Move.performed += MoveHandlerStarts;
+            playerInputControls.MouseKeyboard.Move.canceled+= MoveHandlerEnds;
+            playerInputControls.MouseKeyboard.Rotate.performed += RotateHandlerStarted;
+            playerInputControls.MouseKeyboard.Rotate.canceled += RotateHandlerEnds;
+            playerInputControls.MouseKeyboard.Interact.performed += InteractHandler;
+            playerInputControls.MouseKeyboard.PointerPosition.performed += PointerHandler;
         }
 
         private void OnEnable() {
             playerInputControls.Touch.Enable();
+            playerInputControls.MouseKeyboard.Enable();
         }
 
         private void OnDisable() {
             playerInputControls.Touch.Disable();
+            playerInputControls.MouseKeyboard.Disable();
 
         }
 
+        private void Update() {
+            if (rotation != 0) {
+                OnRotate.Invoke(rotation);
+            }
+
+            if(isMoving) {
+                OnMove.Invoke(moveVector);
+
+                if(moveVector == Vector2.zero) {
+                    isMoving = false;
+                }
+            }
+        }
+
         private void PrimarySwipeHandler(InputAction.CallbackContext context) {
-            if (!EventSystem.current.IsPointerOverGameObject() & currentAction == Action.swipe) {
+            if (playerInputControls.Touch.PrimaryTouchContact.ReadValue<float>() == 1 &&
+                !EventSystem.current.IsPointerOverGameObject()) {
                 Vector2 currentTouchPosition = playerInputControls.Touch.PrimaryTouchPosition.ReadValue<Vector2>();
 
                 if (lastPrimaryTouchPosition is Vector2 valueOfLastTouchPosition) {
                     Vector3 targetPosition = GetWorldPosition(currentTouchPosition);
                     Vector3 direction = GetWorldPosition(valueOfLastTouchPosition) - targetPosition;
-                    direction.y = 0;
-                    OnSwipe?.Invoke(direction);
+                    if (direction != Vector3.zero) {
+                        direction.y = 0;
+                        OnSwipe?.Invoke(direction);
+                        Debug.Log("Swipe perfomed");
+                    }
+                    else {
+                        Debug.Log("Change Swipe on Touch");
+                        currentAction = CurrentAction.touch;
+                    }
                 }
                 lastPrimaryTouchPosition = currentTouchPosition;
             }
@@ -93,45 +136,81 @@ namespace Project.Utils.Input {
         }
 
         private void PrimaryTouchHandler(InputAction.CallbackContext context) {
-            if (!EventSystem.current.IsPointerOverGameObject() & currentAction == Action.touch) {
+            Debug.Log("PrimaryTouchHandler; currentAction " + currentAction);
+            if (!EventSystem.current.IsPointerOverGameObject() & currentAction == CurrentAction.touch) {
                 Vector2 currentMovementInput = playerInputControls.Touch.PrimaryTouchPosition.ReadValue<Vector2>();
-                OnTouch2D?.Invoke(currentMovementInput);
-                OnTouch?.Invoke(GetWorldPosition(currentMovementInput));
+                OnClick2D?.Invoke(currentMovementInput);
+                OnClick?.Invoke(GetWorldPosition(currentMovementInput));
                 currentAction = null;
             }
         }
 
-        private void ZoomHandler(InputAction.CallbackContext context) {
-            if (!EventSystem.current.IsPointerOverGameObject() & currentAction == Action.zoom) {
+        private void PinchHandler(InputAction.CallbackContext context) {
+            if (!EventSystem.current.IsPointerOverGameObject() & currentAction == CurrentAction.zoom) {
                 float fingersDistance = Vector2.Distance(
                     playerInputControls.Touch.PrimaryTouchPosition.ReadValue<Vector2>(),
                     playerInputControls.Touch.SecondaryTouchPosition.ReadValue<Vector2>()
                 );
 
                 if ((fingersLastDistance - fingersDistance) > zoomSensetifity) {
-                    OnZoomOut?.Invoke(zoomAmount);
+                    OnZoomOut?.Invoke();
                 }
                 else if ((fingersDistance - fingersLastDistance) > zoomSensetifity) {
-                    OnZoomIn?.Invoke(zoomAmount);
+                    OnZoomIn?.Invoke();
 
                 }
                 fingersLastDistance = fingersDistance;
             }
         }
 
+        private void ScrollHandler(InputAction.CallbackContext context) {
+            if (!EventSystem.current.IsPointerOverGameObject()) {
+                float value = context.ReadValue<Vector2>().y;
+                if (value > 0) {
+                    OnZoomIn?.Invoke();
+                }
+                else {
+                    OnZoomOut?.Invoke();
+                }
+            }
+        }
+
+        private void MoveHandlerStarts(InputAction.CallbackContext context) {
+            Vector2 currentMovementInput = context.ReadValue<Vector2>();
+            moveVector = currentMovementInput;
+            isMoving = true;
+        }
+        private void MoveHandlerEnds(InputAction.CallbackContext context) {
+            moveVector = Vector2.zero;
+        }
+
+        private void RotateHandlerStarted(InputAction.CallbackContext context) {
+            float currentRotateInput = context.ReadValue<float>();
+            rotation = currentRotateInput;
+        }
+
+        private void RotateHandlerEnds(InputAction.CallbackContext context) {
+            rotation = 0;
+        }
+
+        private void InteractHandler(InputAction.CallbackContext context) {
+            OnInteract?.Invoke();
+        }
+
+         private void PointerHandler(InputAction.CallbackContext context) {
+            Vector2 pointerInput = context.ReadValue<Vector2>();
+            OnPoint?.Invoke(pointerInput);
+        }
+
         private Vector3 GetWorldPosition(Vector2 screenPosition) {
 
             float maxDistance = 100;
             if (Physics.Raycast(Camera.main.ScreenPointToRay(screenPosition), out RaycastHit hit, maxDistance)) {
-                Debug.Log(hit.transform.gameObject);
-                Debug.Log("LAYER " + hit.transform.gameObject.layer + "; " + LayerMask.GetMask("UI"));
-                if (hit.transform.gameObject.layer == LayerMask.GetMask("UI")) {
-                    Debug.Log("CLICK ON UI");
-                }
                 return hit.point;
             }
             return Vector3.zero;
 
         }
+
     }
 }

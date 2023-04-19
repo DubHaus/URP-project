@@ -11,7 +11,6 @@ namespace Project.Gameplay.GameplayObjects {
 
         [SerializeField] CharacterSelectState m_CharacterSelectState;
         [SerializeField] Project.Gameplay.GameState.Character character;
-        [SerializeField] FreeCameraSystem cameraSystem;
 
         public bool isSelected {
             get {
@@ -21,7 +20,7 @@ namespace Project.Gameplay.GameplayObjects {
 
         private void Update() {
             if (isSelected) {
-                cameraSystem.Focus(gameObject.transform);
+                FreeCameraSystem.Instance.Focus(gameObject.transform);
             }
         }
     }

@@ -4,70 +4,114 @@ using UnityEngine;
 using Cinemachine;
 using Project.Utils.Input;
 using VContainer;
+using UnityEngine.UIElements;
+using static UnityEngine.GridBrushBase;
 
 namespace Project.CameraUtils {
 
     public class FreeCameraSystem : MonoBehaviour {
-        [SerializeField] private float zoomSpeed = 10f;
+        static public FreeCameraSystem Instance { get; private set; }
+
+        [SerializeField] private float zoomAmount = 1;
+        [SerializeField] private float rotateAmount = 5;
         [SerializeField] private CinemachineVirtualCamera cinemachineVirtualCamera;
-        [SerializeField] private float minFollowOffset = 10f;
-        [SerializeField] private float maxFollowOffset = 50f;
+        [SerializeField] private Vector3 minFollowOffset = new Vector3(1, 5, 0.5f);
+        [SerializeField] private Vector3 maxFollowOffset = new Vector3(3, 10, 2);
+
 
         private Vector3 followOffset;
+        private bool flippedCameraAngle = false;
 
         private void Awake() {
+            if (Instance != null && Instance != this) {
+                Debug.LogError("More than one FreeCameraSystem instance");
+            }
+            else {
+                Instance = this;
+            }
+
             followOffset = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
         }
 
         private void Start() {
-            PlayerInputController.Instance.OnZoomIn += ZoomIn;
-            PlayerInputController.Instance.OnZoomOut += ZoomOut;
+            PlayerInputController.Instance.OnZoomIn += () => ZoomIn(zoomAmount);
+            PlayerInputController.Instance.OnZoomOut += () => ZoomOut(zoomAmount);
             PlayerInputController.Instance.OnSwipe += Move;
+            PlayerInputController.Instance.OnRotate += direction => Rotate(direction, rotateAmount);
         }
 
-        private void OnDestroy()
-        {
-            PlayerInputController.Instance.OnZoomIn -= ZoomIn;
-            PlayerInputController.Instance.OnZoomOut -= ZoomOut;
+        private void OnDestroy() {
+            PlayerInputController.Instance.OnZoomIn -= () => ZoomIn(zoomAmount);
+            PlayerInputController.Instance.OnZoomOut -= () => ZoomIn(zoomAmount);
             PlayerInputController.Instance.OnSwipe -= Move;
+            PlayerInputController.Instance.OnRotate -= direction => Rotate(direction, rotateAmount);
+            Instance = null;
         }
 
 
 
         public void Move(Vector3 direction) {
-            // Debug.Log("MOVE CAMERA: " + direction);
             transform.position += direction;
         }
 
-        public void ZoomIn(float zoomAmount) {
-            // Debug.Log("ZOOM CAMERA IN:" + zoomAmount);
-            followOffset.y -= zoomAmount;
-            followOffset.z -= zoomAmount / 2;
-            followOffset.y = Mathf.Clamp(followOffset.y, minFollowOffset, maxFollowOffset);
-
-            cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset =
-                Vector3.Lerp(
-                    cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset,
-                    followOffset,
-                    Time.deltaTime * zoomSpeed
+        public void UpdatePosition(Vector3 position) {
+            float updatePositionSpeed = 3f;
+            transform.position = Vector3.Lerp(
+                transform.position,
+                new Vector3(position.x, transform.position.y, position.z),
+                Time.deltaTime * updatePositionSpeed
                 );
+        }
+
+        public void ZoomIn(float zoomAmount) {
+            float followOffsetY =
+                cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>()
+                .m_FollowOffset.y;
+            SetZoom(followOffsetY - zoomAmount);
         }
 
         public void ZoomOut(float zoomAmount) {
-            // Debug.Log("ZOOM CAMERA OUT:" + zoomAmount);
-            followOffset.y += zoomAmount;
-            followOffset.z += zoomAmount / 2;
-            followOffset.y = Mathf.Clamp(followOffset.y, minFollowOffset, maxFollowOffset);
 
-            cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset =
-                Vector3.Lerp(
-                    cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset,
-                    followOffset,
-                    Time.deltaTime * zoomSpeed
-                );
+            float followOffsetY =
+                cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>()
+                .m_FollowOffset.y;
+            SetZoom(followOffsetY + zoomAmount);
         }
 
-        public void Focus(Transform target) {
+        private void SetZoom(float zoom) {
+            Vector3 followOffset = cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
+            followOffset.y = Mathf.Clamp(zoom, 3, 12);
+            cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = followOffset;
+            //Vector3.Lerp(
+            //    cinemachineVirtualCamera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset,
+            //    followOffset,
+            //    Time.deltaTime * zoomSpeed
+            //);
+        }
+
+        public void Rotate(float rotationDirection, float amount) {
+            Vector3 newRotation = transform.eulerAngles;
+            newRotation.y += amount * rotationDirection;
+
+            transform.eulerAngles = newRotation;
+        }
+
+        public void InFocus(UnityEngine.Transform target, float rotation = 0, float zoom = 0) {
+
+            transform.position = new Vector3(target.position.x, 0, target.position.z);
+
+            if (zoom != 0) {
+                SetZoom(zoom);
+            }
+            if (rotation != 0) {
+                Vector3 newRotation = transform.eulerAngles;
+                newRotation.y = rotation;
+
+                transform.eulerAngles = newRotation;
+            }
+        }
+
+        public void Focus(UnityEngine.Transform target) {
             cinemachineVirtualCamera.Follow = target;
             cinemachineVirtualCamera.LookAt = target;
         }
