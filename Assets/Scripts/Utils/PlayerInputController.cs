@@ -49,7 +49,6 @@ namespace Project.Utils.Input {
 
             // Touch
             playerInputControls.Touch.PrimaryTouchContact.started += _ => {
-                Debug.Log("PrimaryTouchContact started");
                 currentAction = CurrentAction.touch;
                 lastPrimaryTouchPosition = playerInputControls.Touch.PrimaryTouchPosition.ReadValue<Vector2>();
             };
@@ -100,11 +99,11 @@ namespace Project.Utils.Input {
 
         private void Update() {
             if (rotation != 0) {
-                OnRotate.Invoke(rotation);
+                OnRotate?.Invoke(rotation);
             }
 
             if(isMoving) {
-                OnMove.Invoke(moveVector);
+                OnMove?.Invoke(moveVector);
 
                 if(moveVector == Vector2.zero) {
                     isMoving = false;
@@ -123,10 +122,8 @@ namespace Project.Utils.Input {
                     if (direction != Vector3.zero) {
                         direction.y = 0;
                         OnSwipe?.Invoke(direction);
-                        Debug.Log("Swipe perfomed");
                     }
                     else {
-                        Debug.Log("Change Swipe on Touch");
                         currentAction = CurrentAction.touch;
                     }
                 }
@@ -136,7 +133,6 @@ namespace Project.Utils.Input {
         }
 
         private void PrimaryTouchHandler(InputAction.CallbackContext context) {
-            Debug.Log("PrimaryTouchHandler; currentAction " + currentAction);
             if (!EventSystem.current.IsPointerOverGameObject() & currentAction == CurrentAction.touch) {
                 Vector2 currentMovementInput = playerInputControls.Touch.PrimaryTouchPosition.ReadValue<Vector2>();
                 OnClick2D?.Invoke(currentMovementInput);

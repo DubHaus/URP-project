@@ -17,9 +17,9 @@ namespace Project.Gameplay.GameplayObjects.Character {
         }
 
         private void Update() {
-            //if (!IsOwner) {
-            //    return;
-            //}
+            if (!IsOwner) {
+                return;
+            }
             playerAnimator.SetBool(IS_WALKING, player.IsWalking());
         }
     }

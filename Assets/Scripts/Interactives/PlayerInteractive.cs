@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.AI;
 using Unity.Netcode;
 using Project.Utils.Input;
-//using static Codice.Client.Common.WebApi.WebApiEndpoints;
 
 namespace Project.Interactive {
 
@@ -23,14 +22,19 @@ namespace Project.Interactive {
         }
 
         private void Interact() {
+            Debug.Log(activeInteractive);
             if (activeInteractive) {
                 activeInteractive.Interact();
             }
         }
 
         private void DetectInteractive() {
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out RaycastHit hit, playerInteractionDetectionRange, layermask)) {
-                hit.transform.gameObject.TryGetComponent(out activeInteractive);
+            var hits = Physics.RaycastAll(transform.position, transform.TransformDirection(Vector3.forward), playerInteractionDetectionRange, layermask);
+            foreach (RaycastHit hit in hits) {
+                if (hit.transform.gameObject.TryGetComponent(out Interactive elem)) {
+                    activeInteractive = elem;
+                    break;
+                }
             }
         }
     }

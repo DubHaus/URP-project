@@ -7,12 +7,13 @@ using Project.Utils.Input;
 using VContainer;
 using Project.VoiceChatUtils;
 using Project.CameraUtils;
-using log4net.Util;
-//using static Codice.Client.Common.WebApi.WebApiEndpoints;
 
 namespace Project.Gameplay.GameplayObjects.Character {
 
     public class Player : NetworkBehaviour {
+
+        static public Player LocalInstance { get; private set; }
+
         [SerializeField] float playerInteractionDetectionRange = 5;
         [SerializeField] private LayerMask layermask;
 
@@ -24,32 +25,34 @@ namespace Project.Gameplay.GameplayObjects.Character {
             agent = GetComponent<NavMeshAgent>();
         }
 
-        private void Start() {
-            PlayerInputController.Instance.OnClick += OnMove; // TODO Delete when testing online
-            PlayerInputController.Instance.OnMove += OnMoveWASD; // TODO Delete when testing online
+        //private void Start() {
+        //    PlayerInputController.Instance.OnClick += OnMove; // TODO Delete when testing online
+        //    PlayerInputController.Instance.OnMove += OnMoveWASD; // TODO Delete when testing online
+        //}
+        public override void OnNetworkSpawn() {
+            base.OnNetworkSpawn();
+            if (IsOwner) {
+                if (LocalInstance != null) {
+                    Debug.LogError("More than one local Player instance");
+                } else {
+                    LocalInstance = this;
+                    Debug.Log("LocalPlayerInstance " + this.transform);
+                }
+                PlayerInputController.Instance.OnClick += OnMove;
+                PlayerInputController.Instance.OnMove += OnMoveWASD;
+            }
         }
 
 
         private void Update() {
-            if (IsWalking()
-                //&& IsOwner
-                ) {
+            if (IsOwner && IsWalking()) {
                 FreeCameraSystem.Instance.UpdatePosition(transform.position);
             }
             if (!IsOwner) {
-                //AgoraVoiceController.Instance.UpdateSpatialAudioPosition(transform.position);
+                AgoraVoiceController.Instance.UpdateSpatialAudioPosition(transform.position);
             }
         }
 
-        public override void OnNetworkSpawn() {
-            base.OnNetworkSpawn();
-            if (IsOwner) {
-                PlayerInputController.Instance.OnClick += Move;
-                PlayerInputController.Instance.OnMove += (Vector2 direction) => {
-                    Debug.Log(direction);
-                };
-            }
-        }
 
         public override void OnNetworkDespawn() {
             base.OnNetworkDespawn();
@@ -69,32 +72,32 @@ namespace Project.Gameplay.GameplayObjects.Character {
         }
 
         public void Move(Vector3 targetPosition) {
-            //if (IsOwner) {
-            agent.SetDestination(targetPosition);
-            //}
+            if (IsOwner) {
+                agent.SetDestination(targetPosition);
+            }
         }
 
         public void MoveWASD(Vector2 directions) {
-            //if (IsOwner) {
-            movementVector = new Vector3(directions.x, 0, directions.y);
+            if (IsOwner) {
+                movementVector = new Vector3(directions.x, 0, directions.y);
 
-            if (movementVector != Vector3.zero) {
-                agent.ResetPath();
-                Vector3 forward = Camera.main.transform.forward;
-                forward.y = 0;
-                forward = forward.normalized;
-                Vector3 right = Camera.main.transform.right;
-                right.y = 0;
-                right = right.normalized;
+                if (movementVector != Vector3.zero) {
+                    agent.ResetPath();
+                    Vector3 forward = Camera.main.transform.forward;
+                    forward.y = 0;
+                    forward = forward.normalized;
+                    Vector3 right = Camera.main.transform.right;
+                    right.y = 0;
+                    right = right.normalized;
 
-                Vector3 normalizedforwardMovement = forward * movementVector.z;
-                Vector3 normalizedSideMovement = right * movementVector.x;
-                Vector3 normalizedMovement = normalizedforwardMovement + normalizedSideMovement;
-                agent.Move(normalizedMovement * agent.speed * Time.deltaTime);
-                transform.rotation = Quaternion.LookRotation(normalizedMovement);
+                    Vector3 normalizedforwardMovement = forward * movementVector.z;
+                    Vector3 normalizedSideMovement = right * movementVector.x;
+                    Vector3 normalizedMovement = normalizedforwardMovement + normalizedSideMovement;
+                    agent.Move(normalizedMovement * agent.speed * Time.deltaTime);
+                    transform.rotation = Quaternion.LookRotation(normalizedMovement);
+                }
+
             }
-
-            //}
         }
 
         public void SetMovementLocked(bool value) {

@@ -20,9 +20,14 @@ public class ClickableController : MonoBehaviour {
 
     private void OnClick(Vector2 clickPosition) {
         float maxDistance = 100;
-        if (Physics.Raycast(Camera.main.ScreenPointToRay(clickPosition), out RaycastHit hit, maxDistance, clickableLayers)) {
-            if (hit.transform.gameObject.TryGetComponent(out Clickable elem)) {
-                elem.Click(hit);
+
+        var hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(clickPosition), maxDistance, clickableLayers);
+
+        foreach (RaycastHit hit in hits) {
+            if (hit.transform.gameObject.TryGetComponent(out Interactive elem)) {
+                if (elem.clickable.enabled) {
+                    elem.clickable.Click(hit);
+                }
             }
         }
     }

@@ -1,0 +1,22 @@
+{
+    "name": "Project.ChessBoard",
+    "rootNamespace": "",
+    "references": [
+        "Project.Gameplay",
+        "Project.CameraUtils",
+        "Unity.Netcode.Runtime",
+        "Unity.Netcode.Components",
+        "Project.Interactive",
+        "VContainer",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 943816055935623777}
   - component: {fileID: 8913600823716991969}
   - component: {fileID: 7131184796276135325}
+  - component: {fileID: 2203442060933476445}
   m_Layer: 0
   m_Name: GirlPlayer
   m_TagString: Untagged
@@ -70,6 +71,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80213eb2a66294f75b30005b082f7a21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerInteractionDetectionRange: 5
+  layermask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &8913600823716991969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,6 +117,22 @@ MonoBehaviour:
   ScaleThreshold: 0.01
   InLocalSpace: 0
   Interpolate: 1
+--- !u!114 &2203442060933476445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 943816055935623776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 603c5a03cb51e4ba6896acf641f03a42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInteractionDetectionRange: 5
+  layermask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1001 &5760563334337422386
 PrefabInstance:
   m_ObjectHideFlags: 0

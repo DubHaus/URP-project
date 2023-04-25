@@ -7,7 +7,17 @@ namespace Project.Gameplay.UI {
 
     public class TipsUI : MonoBehaviour {
         [SerializeField] TMP_Text tipText;
+        static public TipsUI Instance { get; private set; }
         // Start is called before the first frame update
+
+        private void Awake() {
+            if (Instance != null && Instance != this) {
+                Debug.LogError("More than one TipsUI instance");
+            } else {
+                Instance = this;
+            }
+        }
+
         void Start() {
 
         }

@@ -25,8 +25,7 @@ namespace Project.CameraUtils {
         private void Awake() {
             if (Instance != null && Instance != this) {
                 Debug.LogError("More than one FreeCameraSystem instance");
-            }
-            else {
+            } else {
                 Instance = this;
             }
 
@@ -34,18 +33,29 @@ namespace Project.CameraUtils {
         }
 
         private void Start() {
-            PlayerInputController.Instance.OnZoomIn += () => ZoomIn(zoomAmount);
-            PlayerInputController.Instance.OnZoomOut += () => ZoomOut(zoomAmount);
+            PlayerInputController.Instance.OnZoomIn += OnZoomIn;
+            PlayerInputController.Instance.OnZoomOut += OnZoomOut;
             PlayerInputController.Instance.OnSwipe += Move;
-            PlayerInputController.Instance.OnRotate += direction => Rotate(direction, rotateAmount);
+            PlayerInputController.Instance.OnRotate += OnRotate;
         }
 
         private void OnDestroy() {
-            PlayerInputController.Instance.OnZoomIn -= () => ZoomIn(zoomAmount);
-            PlayerInputController.Instance.OnZoomOut -= () => ZoomIn(zoomAmount);
+            PlayerInputController.Instance.OnZoomIn -= OnZoomIn;
+            PlayerInputController.Instance.OnZoomOut -= OnZoomOut;
             PlayerInputController.Instance.OnSwipe -= Move;
-            PlayerInputController.Instance.OnRotate -= direction => Rotate(direction, rotateAmount);
+            PlayerInputController.Instance.OnRotate -= OnRotate;
             Instance = null;
+        }
+
+        private void OnZoomIn() {
+            ZoomIn(zoomAmount);
+        }
+
+        private void OnZoomOut() {
+            ZoomOut(zoomAmount);
+        }
+        private void OnRotate(float direction) {
+            Rotate(direction, rotateAmount);
         }
 
 
@@ -111,7 +121,7 @@ namespace Project.CameraUtils {
             }
         }
 
-        public void Focus(UnityEngine.Transform target) {
+        public void Focus(Transform target) {
             cinemachineVirtualCamera.Follow = target;
             cinemachineVirtualCamera.LookAt = target;
         }

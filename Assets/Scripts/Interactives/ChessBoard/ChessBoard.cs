@@ -3,74 +3,76 @@ using System.Collections.Generic;
 using Project.CameraUtils;
 using Project.Gameplay.GameplayObjects.Character;
 using Project.Gameplay.UI;
+using Unity.Netcode;
 using UnityEngine;
-using Project.Utils.Input;
 
 
-namespace Project.Interactive {
+namespace Project.ChessBoard {
 
-    public class GameState {
-        ChessPiece activePiece;
-    }
+    public class ChessBoard : MonoBehaviour {
 
-    public class ChessBoard : Interactive {
+        [SerializeField] GameObject ChessPiecePrefab;
 
-        [SerializeField] Player player;
+        [SerializeField] ChessBoardNetworkController ChessBoardNetworkController;
         [SerializeField] FreeCameraSystem cameraSystem;
-        [SerializeField] TipsUI tipsUI;
-        [SerializeField] private LayerMask layermask;
 
-        private ChessPiece activePiece;
-        private ChessBoardState gameStateActive;
-        private GameState gameState;
-
-        private void Awake() {
-            gameStateActive.UpdateState = (GameState state) => {
-                gameState = state;
-            };
-        }
-
+        private ChessBoardSquare[,] squares = new ChessBoardSquare[8, 8];
+        private List<ChessPiece> piecesGO = new List<ChessPiece>();
 
         void Start() {
-            ChessPiece[] children = gameObject.GetComponentsInChildren<ChessPiece>();
+            ChessBoardSquare[] squaresGo = gameObject.GetComponentsInChildren<ChessBoardSquare>();
 
-            foreach (ChessPiece child in children) {
-                child.OnClick += (_) => {
-                    gameStateActive.ClickOnPiece(child.piece);
+            foreach (var square in squaresGo) {
+                squares[(int)square.coordinates.x, (int)square.coordinates.y] = square;
+                square.clickable.OnClick += (_) => {
+                    ChessBoardNetworkController.ActiveState.ClickOnBoard(square);
                 };
             }
-            this.OnClick += (hit) => {
-                gameStateActive.ClickOnBoard("B1");
-            };
         }
 
-        void Update() {
+        public void InstantiatePieces(NetworkList<Piece> pieces) {
+            Debug.Log(ChessPiecePrefab.gameObject);
+            foreach (var piece in pieces) {
+                var prefab = Instantiate(ChessPiecePrefab, transform);
+                if (prefab.TryGetComponent(out ChessPiece chessPiece)) {
+                    chessPiece.id = piece.id;
+                    chessPiece.pieceColor = piece.color;
+                    chessPiece.piece = piece.type;
+                    chessPiece.InitPosition(piece.position);
+                    chessPiece.clickable.OnClick += (_) => {
+                        ChessBoardNetworkController.ActiveState.ClickOnPiece(chessPiece);
+                    };
+
+                    piecesGO.Add(chessPiece);
+                } else {
+                    Debug.LogError("ChessPiecePrefab do not have ChessPiece component");
+                }
+            }
 
         }
 
-        //private void OnClick(Vector2 clickPosition) {
-        //    float maxDistance = 100;
-        //    if (Physics.Raycast(Camera.main.ScreenPointToRay(clickPosition), out RaycastHit hit, maxDistance)) {
-        //        Debug.Log(hit.transform);
-        //        if (hit.transform.gameObject.TryGetComponent(out ChessPiece chessPiece)) {
-        //            player.Move(chessPiece.transform.position);
-        //            Destroy(hit.transform.gameObject);
-        //        }
-        //    }
-        //}
+        public void UpdatePieces(NetworkList<Piece> pieces) {
+            foreach (var piece in pieces) {
+                var matchedPiece = piecesGO.Find((pieceGO) => pieceGO.pieceColor == piece.color && pieceGO.piece == piece.type);
+                matchedPiece.pieceColor = piece.color;
+                matchedPiece.piece = piece.type;
+                matchedPiece.Move(piece.position);
+            }
 
-        override public void Interact() {
-            StartGame();
         }
 
-        private void StartGame() {
+
+        public void HighlightSquare(Vector2 squareCoords) {
+            Debug.Log("HighlightSquare " + squareCoords[0] + " " + squareCoords[1]);
+            squares[(int)squareCoords.x, (int)squareCoords.y]?.Highlight();
+        }
+
+
+        public void Interact() {
             cameraSystem.InFocus(transform, 45, 5);
-            tipsUI.ShowTip("Select character");
-            player.SetMovementLocked(true);
-
-
-
+            Gameplay.GameplayObjects.Character.Player.LocalInstance.SetMovementLocked(true);
         }
+
     }
 }
 

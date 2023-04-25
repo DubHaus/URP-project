@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.12731704, g: 0.13414726, b: 0.1210787, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731749, g: 0.13414757, b: 0.1210787, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -133,7 +133,6 @@ GameObject:
   m_Component:
   - component: {fileID: 37411533}
   - component: {fileID: 37411532}
-  - component: {fileID: 37411531}
   - component: {fileID: 37411534}
   m_Layer: 0
   m_Name: Main Camera
@@ -142,14 +141,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &37411531
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 37411530}
-  m_Enabled: 1
 --- !u!20 &37411532
 Camera:
   m_ObjectHideFlags: 0
@@ -345,7 +336,24 @@ MonoBehaviour:
     ProtocolVersion: 0
     NetworkTransport: {fileID: 729215779}
     PlayerPrefab: {fileID: 0}
-    NetworkPrefabs:
+    Prefabs:
+      NetworkPrefabsLists: []
+    TickRate: 30
+    ClientConnectionBufferTimeout: 10
+    ConnectionApproval: 0
+    ConnectionData: 
+    EnableTimeResync: 0
+    TimeResyncInterval: 30
+    EnsureNetworkVariableLengthSafety: 0
+    EnableSceneManagement: 1
+    ForceSamePrefabs: 1
+    RecycleNetworkIds: 1
+    NetworkIdRecycleDelay: 120
+    RpcHashSize: 0
+    LoadSceneTimeOut: 120
+    SpawnTimeout: 1
+    EnableNetworkLogs: 1
+    OldPrefabList:
     - Override: 2
       Prefab: {fileID: 943816055935623776, guid: c29e61147f7724e4381dea3c865e5df0,
         type: 3}
@@ -362,21 +370,6 @@ MonoBehaviour:
       SourceHashToOverride: 22
       OverridingTargetPrefab: {fileID: 943816055935623776, guid: 7de68d36db1a44aadaf2ecd910a2fe3e,
         type: 3}
-    TickRate: 30
-    ClientConnectionBufferTimeout: 10
-    ConnectionApproval: 0
-    ConnectionData: 
-    EnableTimeResync: 0
-    TimeResyncInterval: 30
-    EnsureNetworkVariableLengthSafety: 0
-    EnableSceneManagement: 1
-    ForceSamePrefabs: 1
-    RecycleNetworkIds: 1
-    NetworkIdRecycleDelay: 120
-    RpcHashSize: 0
-    LoadSceneTimeOut: 120
-    SpawnTimeout: 1
-    EnableNetworkLogs: 1
 --- !u!114 &729215779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -399,7 +392,7 @@ MonoBehaviour:
   ConnectionData:
     Address: 127.0.0.1
     Port: 7777
-    ServerListenAddress: 
+    ServerListenAddress: 127.0.0.1
   DebugSimulator:
     PacketDelayMS: 0
     PacketJitterMS: 0
@@ -627,7 +620,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   zoomSensetifity: 1
-  zoomAmount: 3
 --- !u!4 &1010248500
 Transform:
   m_ObjectHideFlags: 0
@@ -674,7 +666,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _appID: 9e59f51bf0ba4b208502f338d3ef4dc3
   _channelName: unity
-  _token: 007eJxTYJjOapOdsWZ22o6LaQ9NjJS6mpQsij9e0RR/uSg9981FrVkKDJapppZppoZJaQZJiSZJRgYWpgZGacbGFinGqWkmKcnGtzkVUhoCGRnM7+5jYmSAQBCflaE0L7OkkoEBAE+cH78=
+  _token: 007eJxTYOjgbS4+tv7Yht92OSoSV4z4WV9v+Cx1993+S18b2MpCLUQUGCxTTS3TTA2T0gySEk2SjAwsTA2M0oyNLVKMU9NMUpKNf35wSWkIZGR4mifLyMgAgSA+K0NpXmZJJQMDALGIIR4=
   remoteUid: 0
 --- !u!4 &1120412260
 Transform:
@@ -701,6 +693,10 @@ PrefabInstance:
     - target: {fileID: 132536, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_Name
       value: IngameDebugConsole
+      objectReference: {fileID: 0}
+    - target: {fileID: 132536, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 22426080, guid: 67117722a812a2e46ab8cb8eafbf5f5e, type: 3}
       propertyPath: m_AnchorMax.x
