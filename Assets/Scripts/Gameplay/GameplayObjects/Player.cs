@@ -31,6 +31,12 @@ namespace Project.Gameplay.GameplayObjects.Character {
         //}
         public override void OnNetworkSpawn() {
             base.OnNetworkSpawn();
+            Debug.Log("Player IsOwner " + IsOwner);
+            Debug.Log("Player IsLocalPlayer " + IsLocalPlayer);
+            Debug.Log("Player IsClient " + IsClient);
+            Debug.Log("Player IsHost " + IsHost);
+            Debug.Log("Player IsServer " + IsServer);
+
             if (IsOwner) {
                 if (LocalInstance != null) {
                     Debug.LogError("More than one local Player instance");
@@ -40,6 +46,7 @@ namespace Project.Gameplay.GameplayObjects.Character {
                 }
                 PlayerInputController.Instance.OnClick += OnMove;
                 PlayerInputController.Instance.OnMove += OnMoveWASD;
+                GetComponent<AudioListener>().enabled = true;
             }
         }
 
@@ -98,6 +105,11 @@ namespace Project.Gameplay.GameplayObjects.Character {
                 }
 
             }
+        }
+
+        public void SyncPosition(Transform parent) {
+            gameObject.transform.position = parent.position;
+            gameObject.transform.rotation = parent.rotation;
         }
 
         public void SetMovementLocked(bool value) {

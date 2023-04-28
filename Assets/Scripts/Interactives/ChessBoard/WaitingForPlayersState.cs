@@ -19,7 +19,7 @@ namespace Project.ChessBoard {
             Debug.Log("OnJoinGame " + playersCount);
             float minPlayersCount = 2;
             if (playersCount >= minPlayersCount) {
-                ChangeState(ActiveGameState.ChoosingCharacter);
+                ChessBoardNetworkController.LocalInstance.ChangeState(ActiveGameState.ChoosingCharacter);
             }
         }
 

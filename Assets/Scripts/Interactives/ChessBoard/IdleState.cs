@@ -16,7 +16,7 @@ namespace Project.ChessBoard {
         }
 
         public override void Interact() {
-            ChangeState(ActiveGameState.WaitingForPlayers);
+            ChessBoardNetworkController.LocalInstance.ChangeState(ActiveGameState.WaitingForPlayers);
         }
     }
 }

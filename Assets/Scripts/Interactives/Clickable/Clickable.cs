@@ -8,7 +8,15 @@ public class Clickable {
 
     public bool enabled = true;
 
-    public void Click(RaycastHit hit) {
-        OnClick?.Invoke(hit);
+    public bool Click(RaycastHit hit) {
+        if (OnClick != null) {
+            OnClick.Invoke(hit);
+            return true;
+        }
+        return false;
+    }
+
+    public void ClearSubscribtions() {
+        OnClick = null;
     }
 }

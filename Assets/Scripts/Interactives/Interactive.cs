@@ -12,6 +12,11 @@ namespace Project.Interactive {
         public Clickable clickable = new Clickable();
         public Highlighted highlighted = new Highlighted();
 
+        public override void OnDestroy() {
+            base.OnDestroy();
+            clickable.ClearSubscribtions();
+        }
+
     }
 
 

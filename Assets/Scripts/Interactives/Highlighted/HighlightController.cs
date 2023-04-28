@@ -30,7 +30,6 @@ namespace Project.Interactive {
             }
 
             if (Physics.Raycast(Camera.main.ScreenPointToRay(screenPosition), out RaycastHit hit, maxDistance, highlightActiveLayers)) {
-                Debug.Log(hit.transform);
                 if (hit.transform.gameObject.TryGetComponent(out Interactive elem)) {
                     if (elem.highlighted.enabled) {
                         currentHighlightLayer = hit.transform.gameObject.layer;

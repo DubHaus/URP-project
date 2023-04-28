@@ -9,7 +9,11 @@ using Project.Interactive;
 
 namespace Project.ChessBoard {
 
-
+    public enum PieceOverlap {
+        Friendly,
+        Enemy,
+        NoOverlap
+    }
 
     public enum PlayerState {
         NotReady,
@@ -26,7 +30,35 @@ namespace Project.ChessBoard {
         Idle,
         WaitingForPlayers,
         ChoosingCharacter,
-        PlayingGame
+        PlayingGame,
+        EndGame
+    }
+
+    public struct GameState : INetworkSerializable, System.IEquatable<GameState> {
+
+        public ActiveGameState activeGameState;
+        public ulong activePlayerId;
+        public ulong loserPlayerId;
+        public GameState(ActiveGameState activeGameState, ulong activePlayerId, ulong loserPlayerId) {
+            this.activeGameState = activeGameState;
+            this.activePlayerId = activePlayerId;
+            this.loserPlayerId = loserPlayerId;
+        }
+        public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter {
+            if (serializer.IsReader) {
+                var reader = serializer.GetFastBufferReader();
+                reader.ReadValueSafe(out activeGameState);
+                reader.ReadValueSafe(out activePlayerId);
+            } else {
+                var writer = serializer.GetFastBufferWriter();
+                writer.WriteValueSafe(activeGameState);
+                writer.WriteValueSafe(activePlayerId);
+            }
+        }
+
+        public bool Equals(GameState other) {
+            return activeGameState == other.activeGameState && activePlayerId == other.activePlayerId && loserPlayerId == other.loserPlayerId;
+        }
     }
 
 
@@ -34,11 +66,13 @@ namespace Project.ChessBoard {
         public ulong id;
         public ChessPiceType character;
         public PlayerState state;
+        public ChessPicesColor side;
 
-        public Player(ulong id, ChessPiceType character, PlayerState state) {
+        public Player(ulong id, ChessPiceType character, ChessPicesColor side, PlayerState state) {
             this.id = id;
             this.character = character;
             this.state = state;
+            this.side = side;
 
         }
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter {
@@ -46,17 +80,19 @@ namespace Project.ChessBoard {
                 var reader = serializer.GetFastBufferReader();
                 reader.ReadValueSafe(out id);
                 reader.ReadValueSafe(out character);
+                reader.ReadValueSafe(out side);
                 reader.ReadValueSafe(out state);
             } else {
                 var writer = serializer.GetFastBufferWriter();
                 writer.WriteValueSafe(id);
                 writer.WriteValueSafe(character);
+                writer.WriteValueSafe(side);
                 writer.WriteValueSafe(state);
             }
         }
 
         public bool Equals(Player other) {
-            return id == other.id && character == other.character && state == other.state;
+            return id == other.id && character == other.character && side == other.side && state == other.state;
         }
     }
 
@@ -66,11 +102,11 @@ namespace Project.ChessBoard {
         public ChessPicesColor color;
         public int id;
 
-        public Piece(ChessPiceType type, ChessPicesColor color, Vector2 position) {
+        public Piece(ChessPiceType type, ChessPicesColor color, Vector2 position, int id) {
             this.type = type;
             this.color = color;
             this.position = position;
-            id = (int)type + (int)color;
+            this.id = id;
         }
         public void NetworkSerialize<T>(BufferSerializer<T> serializer) where T : IReaderWriter {
             if (serializer.IsReader) {
@@ -109,7 +145,7 @@ namespace Project.ChessBoard {
 
 
 
-        static public ChessBoardNetworkController Instance;
+        static public ChessBoardNetworkController LocalInstance;
         static public int[,] ChessBoardSquaresMatrix = new int[8, 8] {
             { 0, 1, 2, 3, 4, 5, 6, 7 },
             { 0, 1, 2, 3, 4, 5, 6, 7 },
@@ -122,7 +158,7 @@ namespace Project.ChessBoard {
         };
 
         [SerializeField] public ChessBoard ChessBoard;
-        public NetworkVariable<ActiveGameState> activeState { get; } = new NetworkVariable<ActiveGameState>(ActiveGameState.Idle);
+        public NetworkVariable<GameState> gameState { get; } = new NetworkVariable<GameState>(new GameState(ActiveGameState.Idle, 0, 0));
         public NetworkList<Player> players;
         public NetworkList<Piece> pieces;
 
@@ -130,59 +166,82 @@ namespace Project.ChessBoard {
 
         private List<(Piece, ChessPiece)> piecesMap = new List<(Piece, ChessPiece)>();
 
+        public Player? localPlayer {
+            get {
+                foreach (Player player in players) {
+                    if (player.id == NetworkManager.Singleton.LocalClientId) {
+                        return player;
+                    }
+                };
+                return null;
+            }
+        }
+
+        public bool isLocalPlayerActive {
+            get {
+                return gameState.Value.activePlayerId == NetworkManager.Singleton.LocalClientId;
+            }
+        }
+
         private void Awake() {
-            if (Instance != null) {
-                Debug.LogError("More than one instance of ChessBoardNetworkController");
-            } else {
-                Instance = this;
-            }
-
-            List<Piece> localPieces = new List<Piece>();
-            foreach (ChessPicesColor color in Enum.GetValues(typeof(ChessPicesColor))) {
-                foreach (ChessPiceType type in Enum.GetValues(typeof(ChessPiceType))) {
-                    localPieces.Add(new Piece(type, color, new Vector2(CHESS_PIECES_START_POSITION[type], color == ChessPicesColor.White ? 0 : 7)));
-                }
-            }
-            pieces = new NetworkList<Piece>(localPieces);
-
+            pieces = new NetworkList<Piece>();
             players = new NetworkList<Player>();
         }
 
         private void Start() {
-            ActiveState.ChangeState = (state) => {
-                ChangeActiveStateServerRpc(state);
-            };
             ActiveState.JoinGame = JoinGame;
             ActiveState.Enter();
         }
 
 
         public override void OnNetworkSpawn() {
-            activeState.OnValueChanged += (_, _) => {
+            if (LocalInstance != null) {
+                Debug.LogError("More than one local instance of ChessBoardNetworkController");
+            } else {
+                LocalInstance = this;
+            }
+
+            if (IsHost) {
+                foreach (ChessPicesColor color in Enum.GetValues(typeof(ChessPicesColor))) {
+                    foreach (ChessPiceType type in Enum.GetValues(typeof(ChessPiceType))) {
+                        int randomId = UnityEngine.Random.Range(0, 10000);
+                        pieces.Add(new Piece(type, color, new Vector2(CHESS_PIECES_START_POSITION[type], color == ChessPicesColor.White ? 0 : 7), randomId));
+                    }
+                }
+            }
+
+            gameState.OnValueChanged += (pref, _) => {
                 // exit from pref state
                 ActiveState.Exit();
 
-                switch (activeState.Value) {
-                    case ActiveGameState.Idle:
-                        ActiveState = new IdleState();
-                        break;
-                    case ActiveGameState.WaitingForPlayers:
-                        ActiveState = new WaitingForPlayersState();
-                        break;
-                    case ActiveGameState.ChoosingCharacter:
-                        ActiveState = new ChoosingCharacterState();
-                        break;
-                    case ActiveGameState.PlayingGame:
-                        ActiveState = new PlayingGameState();
-                        break;
+                if (pref.activeGameState != gameState.Value.activeGameState) {
+                    switch (gameState.Value.activeGameState) {
+                        case ActiveGameState.Idle:
+                            ActiveState = new IdleState();
+                            break;
+                        case ActiveGameState.WaitingForPlayers:
+                            ActiveState = new WaitingForPlayersState();
+                            break;
+                        case ActiveGameState.ChoosingCharacter:
+                            ActiveState = new ChoosingCharacterState();
+                            break;
+                        case ActiveGameState.PlayingGame:
+                            ActiveState = new PlayingGameState();
+                            break;
+                        case ActiveGameState.EndGame:
+                            ActiveState = new EndGameState();
+                            break;
+                    }
+                    ActiveState.JoinGame = JoinGame;
+                    ActiveState.LeaveGame = LeaveGame;
+                    ActiveState.Enter();
                 }
 
-                ActiveState.ChangeState = (state) => {
-                    ChangeActiveStateServerRpc(state);
-                };
-                ActiveState.JoinGame = JoinGame;
-                ActiveState.LeaveGame = LeaveGame;
-                ActiveState.Enter();
+                if (pref.activePlayerId != gameState.Value.activePlayerId) {
+                    Debug.Log("activePlayerId " + gameState.Value.activePlayerId + "; localClientId " + NetworkManager.LocalClientId);
+                    ActiveState.OnPlayersTurn();
+                }
+
             };
 
             ChessBoard.InstantiatePieces(pieces);
@@ -211,6 +270,13 @@ namespace Project.ChessBoard {
                     }
 
                 }
+
+                if (changed.PreviousValue.character != changed.Value.character) {
+                    Debug.Log("ChooseCharacter " + changed.Value.character + "id: " + changed.Value.id + "; localId: " + NetworkManager.LocalClient.ClientId);
+                    if (changed.Value.id == NetworkManager.LocalClient.ClientId) {
+                        ChessBoard.ChooseCharacter(changed.Value.character, changed.Value.side);
+                    }
+                }
             };
 
         }
@@ -221,29 +287,49 @@ namespace Project.ChessBoard {
         }
 
         public void UpdatePiecePosition(int id, Vector2 position) {
-            foreach (var piece in pieces) {
-                if (piece.id == id) {
-                    pieces[pieces.IndexOf(piece)] = new Piece(piece.type, piece.color, position);
-                    break;
-                }
-            }
+            UpdatePiecePositionServerRpc(id, position);
         }
 
+        public (PieceOverlap, Piece? piece) CheckPieceOverlap(ChessPicesColor color, Vector2 position) {
 
+            foreach (var piece in pieces) {
+                if (piece.position == position) {
+                    if (piece.color == color) {
+                        return (PieceOverlap.Friendly, piece);
+                    } else {
+                        return (PieceOverlap.Enemy, piece);
+                    }
+                }
+            }
+
+            return (PieceOverlap.NoOverlap, null);
+        }
 
         private void JoinGame() {
-            AddPlayerServerRpc(NetworkManager.Singleton.LocalClientId);
+            float blackPlayers = 0;
+            foreach (var player in players) {
+                if (player.side == ChessPicesColor.Black) {
+                    blackPlayers++;
+                }
+            }
+            ChessPicesColor side = blackPlayers >= ((float)players.Count / 2) ? ChessPicesColor.White : ChessPicesColor.Black;
+            AddPlayerServerRpc(NetworkManager.Singleton.LocalClientId, side);
         }
 
 
         private void LeaveGame() {
-            RemovePlayerServerRpc(NetworkManager.Singleton.LocalClientId);
+            //RemovePlayerServerRpc(NetworkManager.Singleton.LocalClientId);
         }
 
-        [ServerRpc(RequireOwnership = false)]
-        public void ChangeActiveStateServerRpc(ActiveGameState state) {
-            activeState.Value = state;
+
+        public void ChangeState(ActiveGameState state) {
+            ChangeActiveStateServerRpc(state);
         }
+
+        public void SetLoserPlayerId(ulong playerId) {
+            ChangeLoserPlayerIdServerRpc(playerId);
+        }
+
 
         public void UpdatePlayerCharacter(ChessPiceType chessPice) {
             UpdatePlayerCharacterServerRpc(NetworkManager.LocalClientId, chessPice);
@@ -253,12 +339,54 @@ namespace Project.ChessBoard {
             UpdatePlayerStateServerRpc(NetworkManager.LocalClientId, state);
         }
 
+        public void RemovePiece(int pieceId) {
+            Debug.Log("RemovePiece " + pieceId);
+            RemovePieceServerRpc(pieceId);
+        }
+
+
+        public void ChangeActivePlayer() {
+            ulong playerId = 0;
+            if (gameState.Value.activePlayerId == 0) {
+                playerId = players[0].id;
+            }
+
+            for (int idx = 0; idx < players.Count; idx++) {
+                if (players[idx].id == gameState.Value.activePlayerId) {
+                    if (idx == players.Count - 1) {
+                        playerId = players[0].id;
+                    } else {
+                        playerId = players[idx + 1].id;
+                    }
+                }
+            }
+            ChangeActivePlayerServerRpc(playerId);
+
+        }
+
 
         [ServerRpc(RequireOwnership = false)]
-        public void AddPlayerServerRpc(ulong playerId) {
+        public void ChangeActiveStateServerRpc(ActiveGameState state) {
+            gameState.Value = new GameState(state, gameState.Value.activePlayerId, gameState.Value.loserPlayerId);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void ChangeLoserPlayerIdServerRpc(ulong playerId) {
+            gameState.Value = new GameState(gameState.Value.activeGameState, gameState.Value.activePlayerId, playerId);
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void ChangeActivePlayerServerRpc(ulong activePlayerId) {
+            gameState.Value = new GameState(gameState.Value.activeGameState, activePlayerId, gameState.Value.loserPlayerId);
+        }
+
+
+        [ServerRpc(RequireOwnership = false)]
+        public void AddPlayerServerRpc(ulong playerId, ChessPicesColor side) {
             Player player = new Player();
             player.id = playerId;
             player.state = PlayerState.NotReady;
+            player.side = side;
             players.Add(player);
         }
 
@@ -270,6 +398,7 @@ namespace Project.ChessBoard {
                     players[idx] = new Player(
                         id: players[idx].id,
                         character: chessPice,
+                        side: players[idx].side,
                         state: players[idx].state
                         );
                     break;
@@ -284,8 +413,19 @@ namespace Project.ChessBoard {
                     players[idx] = new Player(
                         id: players[idx].id,
                         character: players[idx].character,
-                        state: state
+                        state: state,
+                        side: players[idx].side
                         );
+                    break;
+                }
+            }
+        }
+
+        [ServerRpc(RequireOwnership = false)]
+        public void UpdatePiecePositionServerRpc(int id, Vector2 position) {
+            foreach (var piece in pieces) {
+                if (piece.id == id) {
+                    pieces[pieces.IndexOf(piece)] = new Piece(piece.type, piece.color, position, piece.id);
                     break;
                 }
             }
@@ -294,8 +434,12 @@ namespace Project.ChessBoard {
 
 
         [ServerRpc(RequireOwnership = false)]
-        public void RemovePlayerServerRpc(ulong playerId) {
-            //players.Remove(playerId);
+        public void RemovePieceServerRpc(int pieceId) {
+            for (int idx = pieces.Count - 1; idx >= 0; idx--) {
+                if (pieces[idx].id == pieceId) {
+                    pieces.RemoveAt(idx);
+                }
+            }
         }
     }
 

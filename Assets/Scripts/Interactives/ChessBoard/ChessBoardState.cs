@@ -12,7 +12,6 @@ namespace Project.ChessBoard {
 
         public Action JoinGame { get; set; }
         public Action LeaveGame { get; set; }
-        public Action<ActiveGameState> ChangeState { get; set; }
 
         public virtual void Interact() { }
         public virtual void StartGame() { }
@@ -20,6 +19,10 @@ namespace Project.ChessBoard {
         public virtual void ClickOnBoard(ChessBoardSquare square) { }
 
         public virtual void OnJoinGame(int playerCount) { }
+
+        public virtual void OnPlayersTurn() { }
+
+        public virtual void OnPlayersKilled(ulong playerId) { }
         public virtual void OnPlayerReady(bool allPlayersReady) { }
     }
 
