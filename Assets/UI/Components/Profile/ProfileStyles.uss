@@ -1,0 +1,15 @@
+.profileComponent {
+	color: var(--white);
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.profileComponent .initials {
+	background-color: var(--accent);
+	border-radius: 100px;
+	width: 24px;
+	height: 24px;
+	align-items: center;
+	justify-content: center;
+}

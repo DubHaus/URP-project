@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="UserAudioStyles.uss" />
+    <ui:VisualElement name="container" >
+        <ui:VisualElement name="micro" class="icon" />
+        <ui:VisualElement name="audio" class="icon" />
+        <ui:Label name="username" class="smText" text="username" />
+    </ui:VisualElement>
+</ui:UXML>

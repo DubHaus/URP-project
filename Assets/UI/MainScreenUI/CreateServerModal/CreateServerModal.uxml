@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+	<Style src="CreateServerModalStyles.uss" />
+
+	<ui:VisualElement class="container">
+		<ui:VisualElement class="row">
+			<ui:VisualElement class="col col-6 align-center">
+				<ui:VisualElement class="createServerModal">
+					<ui:VisualElement class="modalHeader">
+						<ui:Label class="h3" text="Create new server" />
+						 <ui:Button name="closeButton" class="iconButton transparent">
+							<ui:VisualElement class="icon icon-lg closeIcon" />
+						</ui:Button>
+					</ui:VisualElement>
+					
+					<ui:TextField name="serverName" label="Server name" text="" />
+					<ui:TextField name="serverDescription" class="multiline" label="Description" text="" multiline="true" />
+					<ui:TextField name="colorTheme" label="Color theme" text="" />
+		
+					<ui:Button name="createButton" class="button button-lg" text="Create server" />
+
+				</ui:VisualElement>
+			</ui:VisualElement>
+		</ui:VisualElement>
+	</ui:VisualElement>
+</ui:UXML>

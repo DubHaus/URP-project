@@ -1,0 +1,26 @@
+{
+    "name": "Project.ConnectionManagement",
+    "rootNamespace": "",
+    "references": [
+        "Unity.Netcode.Runtime",
+        "Unity.Services.Authentication",
+        "Unity.Services.Core",
+        "Unity.Services.Relay",
+        "Unity.Services.Lobbies",
+        "Project.Utils",
+        "Unity.Networking.Transport",
+        "Project.VoiceChatUtils",
+        "Project.UnityServices",
+        "Project.Gameplay",
+        "VContainer"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

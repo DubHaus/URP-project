@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Project.Interactive;
+using Project.Gameplay;
 
 namespace Project.ChessBoard {
 

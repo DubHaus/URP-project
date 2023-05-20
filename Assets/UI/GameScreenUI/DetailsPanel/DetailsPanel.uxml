@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="DetailsPanelStyles.uss" />
+    <ui:VisualElement class="detailsPanel">
+        <ui:VisualElement class="detailsHeader">
+
+            <ui:VisualElement class="tabs">
+                <ui:Button name="games"  class="tab" >
+                    <ui:Label text="Games"  />
+                    <ui:VisualElement class="icon gamesIcon" />
+                </ui:Button>
+                 <ui:Button name="users" class="tab">
+                    <ui:Label text="Players"  />
+                    <ui:VisualElement class="icon peopleIcon" />
+                </ui:Button> 
+            </ui:VisualElement>
+
+            <ui:Button name="add" class="button button-alt">
+                <ui:Label text="Add"  />
+                <ui:VisualElement class="icon addIcon" />
+            </ui:Button>
+
+        </ui:VisualElement>
+         <ui:VisualElement name="list" />
+    </ui:VisualElement>
+</ui:UXML>

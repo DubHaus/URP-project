@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="ServerCardStyles.uss" />
+    <ui:VisualElement name="container" class="col col-2">
+        <ui:VisualElement name="header">
+            <ui:VisualElement name="image" />
+            <ui:Label name="lastVisit" class="smText" />
+        </ui:VisualElement>
+        <ui:Label name="name" class="h5" text="Viva La Dirt  League" />
+    </ui:VisualElement>
+</ui:UXML>

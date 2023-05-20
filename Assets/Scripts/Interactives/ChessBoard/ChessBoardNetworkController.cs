@@ -3,9 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
-using Project.Gameplay.UI;
-using Unity.Collections;
-using Project.Interactive;
 
 namespace Project.ChessBoard {
 

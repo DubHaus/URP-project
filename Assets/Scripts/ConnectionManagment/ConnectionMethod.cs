@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using Unity.Netcode.Transports.UTP;
@@ -9,28 +7,29 @@ using Unity.Services.Core;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using Project.Utils;
-using Unity.Netcode;
+using Project.UnityServices.Lobbies;
 
 namespace Project.ConnectionManagment {
 
     public abstract class ConnectionMethod {
         protected ConnectionManager m_ConnectionManager;
+        readonly ProfileManager m_ProfileManager;
         protected readonly string m_PlayerName;
 
-        public abstract Task SetupHostConnectionAsync(uint characterHash);
-        public abstract Task SetupClientConnectionAsync(string joinCode, uint characterHash);
+        public abstract Task SetupHostConnectionAsync();
+        public abstract Task SetupClientConnectionAsync();
 
-        public ConnectionMethod(ConnectionManager connectionManager, string playerName) {
+        public ConnectionMethod(ConnectionManager connectionManager, ProfileManager profileManager, string playerName) {
             m_ConnectionManager = connectionManager;
             m_PlayerName = playerName;
+            m_ProfileManager = profileManager;
         }
 
-        protected void SetConnectionPayload(string playerId, string playerName, uint characterHash) {
+        protected void SetConnectionPayload(string playerId, string playerName) {
             var payload = JsonUtility.ToJson(
                 new ConnectionPayload() {
                     playerId = playerId,
-                    playerName = playerName,
-                    characterHash = characterHash,
+                    playerName = playerName
                 }
             );
 
@@ -40,8 +39,8 @@ namespace Project.ConnectionManagment {
         }
 
         protected string GetPlayerId() {
-            if (UnityServices.State != ServicesInitializationState.Initialized) {
-                return ClientPrefabs.GetGuid();
+            if (Unity.Services.Core.UnityServices.State != ServicesInitializationState.Initialized) {
+                return ClientPrefabs.GetGuid() + m_ProfileManager.Profile;
             }
 
             return AuthenticationService.Instance.IsSignedIn ? AuthenticationService.Instance.PlayerId : ClientPrefabs.GetGuid();
@@ -50,34 +49,44 @@ namespace Project.ConnectionManagment {
 
     public class RelayConnectionMethod : ConnectionMethod {
 
-        public RelayConnectionMethod(ConnectionManager connectionManager, string playerName)
-            : base(connectionManager, playerName) {
+        LocalLobby m_LocalLobby;
+        LobbyServiceFacade m_LobbyServiceFacade;
+
+        public RelayConnectionMethod(LocalLobby localLobby, LobbyServiceFacade lobbyServiceFacade, ConnectionManager connectionManager, ProfileManager profileManager, string playerName)
+            : base(connectionManager, profileManager, playerName) {
+            m_LocalLobby = localLobby;
+            m_LobbyServiceFacade = lobbyServiceFacade;
         }
 
-        public override async Task SetupClientConnectionAsync(string joinCode, uint characterHash) {
+        public override async Task SetupClientConnectionAsync() {
             Debug.Log("Setting up Unity Relay client");
+            Debug.Log("GetPlayerId " + GetPlayerId());
+            SetConnectionPayload(GetPlayerId(), m_PlayerName);
 
-            SetConnectionPayload(GetPlayerId(), m_PlayerName, characterHash);
+            Debug.Log($"Setting Unity Relay client with join code {m_LocalLobby.RelayJoinCode}");
 
-            Debug.Log($"Setting Unity Relay client with join code {joinCode}");
+            var joinAllocation = await RelayService.Instance.JoinAllocationAsync(m_LocalLobby.RelayJoinCode);
+            await m_LobbyServiceFacade.UpdatePlayerRelayInfoAsync(joinAllocation.AllocationId.ToString(), m_LocalLobby.RelayJoinCode);
 
-            var joinAllocation = await RelayService.Instance.JoinAllocationAsync(joinCode);
             var utp = (UnityTransport)m_ConnectionManager.NetworkManager.NetworkConfig.NetworkTransport;
             utp.SetRelayServerData(new RelayServerData(joinAllocation, OnlineState.k_DtlsConnType));
         }
 
-        public override async Task SetupHostConnectionAsync(uint characterHash) {
+        public override async Task SetupHostConnectionAsync() {
             Debug.Log("Setting up Unity Relay host");
-
-            SetConnectionPayload(GetPlayerId(), m_PlayerName, characterHash);
+            Debug.Log("GetPlayerId " + GetPlayerId());
+            SetConnectionPayload(GetPlayerId(), m_PlayerName);
 
             Allocation hostAllocation = await RelayService.Instance.CreateAllocationAsync(m_ConnectionManager.MaxConnectedPlayer, region: null);
             var joinCode = await RelayService.Instance.GetJoinCodeAsync(hostAllocation.AllocationId);
+
             Debug.Log($"server: connection data: {hostAllocation.ConnectionData[0]} {hostAllocation.ConnectionData[1]}, " +
                 $"allocation ID:{hostAllocation.AllocationId}, region:{hostAllocation.Region}");
             Debug.Log($"JOIN CODE: {joinCode}");
-            m_ConnectionManager.joinCode = joinCode;
 
+            m_LocalLobby.RelayJoinCode = joinCode;
+            await m_LobbyServiceFacade.UpdateLobbyDataAsync(m_LocalLobby.GetDataForUnityServices());
+            await m_LobbyServiceFacade.UpdatePlayerRelayInfoAsync(hostAllocation.AllocationId.ToString(), joinCode);
 
             var utp = (UnityTransport)m_ConnectionManager.NetworkManager.NetworkConfig.NetworkTransport;
             utp.SetRelayServerData(new RelayServerData(hostAllocation, OnlineState.k_DtlsConnType));

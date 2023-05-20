@@ -1,0 +1,35 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="GameScreenStyles.uss" />
+        <ui:VisualElement class="gameScreen">
+            <ui:VisualElement class="row">
+
+            <ui:VisualElement class="col col-3">
+                <ui:VisualElement name="userAudioList" />
+
+                <ui:VisualElement class="audioControls">
+                    <ui:Button name="toggleMicro" class="iconButton iconButton-sm">
+					    <ui:VisualElement class="icon" />
+				    </ui:Button>
+                    <ui:Button name="toggleAudio" class="iconButton iconButton-sm">
+					    <ui:VisualElement class="icon" />
+				    </ui:Button>
+
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+
+            <ui:VisualElement class="col col-6 align-end" >
+
+                 <ui:VisualElement name="gameList">
+                    <ui:Button name="showDetails" class="iconButton">
+				        <ui:VisualElement class="icon moreIcon" />
+			        </ui:Button>
+                </ui:VisualElement>
+
+                <ui:VisualElement name="detailsPanel" />
+
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,23 @@
+.gameDetailsCard {
+	color: var(--white);
+	border-width: 2px;
+	border-color: var(--accent);
+	border-radius: var(--radius);
+	padding: 10px 15px;
+}
+
+.gameDetailsCard #name {
+	color: var(--accent);
+}
+
+.gameDetailsCard .status {
+	align-items: center;
+}
+
+.gameDetailsCard .status Label {
+	margin-botoom: 5px;
+}
+
+.gameDetailsCard > * {
+	margin-bottom: 10px;
+}

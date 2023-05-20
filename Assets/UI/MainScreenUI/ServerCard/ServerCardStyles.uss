@@ -1,0 +1,23 @@
+#container {
+	padding: 10px 10px 30px 10px;
+	border-radius: 10px;
+	background-color: var(--primary);
+}
+
+#header {
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: flex-start;
+	margin-bottom: 15px;
+}
+
+#lastVisit {
+	flex-shrink: 1;
+	margin-left: 8px;
+}
+
+#image {
+	flex-shrink: 0;
+	width: 60px;
+	height: 60px;
+}

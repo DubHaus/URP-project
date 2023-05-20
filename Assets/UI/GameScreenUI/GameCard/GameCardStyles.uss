@@ -1,0 +1,22 @@
+#container {
+	background-color: var(--primary);
+	color: var(--white);
+	padding: 10px 5px 10px 10px;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	max-width: 220px;
+	border-radius: var(--radius);
+}
+
+#name, #players {
+	margin-bottom: 5px;
+}
+
+#play {
+	margin-right: 0px;
+	margin-left: 40px;
+}
+#play .icon {
+	-unity-background-image-tint-color: var(--accent);
+}

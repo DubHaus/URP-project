@@ -4,8 +4,10 @@ using VContainer.Unity;
 
 namespace Project.Gameplay.GameState {
     public enum GameState {
+        StartScreen,
         MainMenu,
-        CharacterSelect
+        CharacterSelect,
+        GameScreen
     }
 
     public abstract class GameStateBehaviour : LifetimeScope {

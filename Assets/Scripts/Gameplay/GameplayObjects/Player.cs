@@ -42,7 +42,6 @@ namespace Project.Gameplay.GameplayObjects.Character {
                     Debug.LogError("More than one local Player instance");
                 } else {
                     LocalInstance = this;
-                    Debug.Log("LocalPlayerInstance " + this.transform);
                 }
                 PlayerInputController.Instance.OnClick += OnMove;
                 PlayerInputController.Instance.OnMove += OnMoveWASD;

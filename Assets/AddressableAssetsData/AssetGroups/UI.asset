@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UI
+  m_EditorClassIdentifier: 
+  m_GroupName: UI
+  m_Data:
+    m_SerializedData: []
+  m_GUID: d0024f9ba84566649b108d744c9e25fe
+  m_SerializeEntries:
+  - m_GUID: 9f5c5652a53044b4585502ec9fbf4311
+    m_Address: Assets/UI/MainScreenUI/ServerCard/ServerCardUI.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: ba441018276ec7e4db9e4e4daf6d3eab
+    m_Address: Assets/UI/MainScreenUI/ConnectByCodeModal/ConnectByCodeModalUI.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 31b5e2ace86a15246842f1dd9abe536f
+    m_Address: Assets/UI/GameScreenUI/UserAudio/UserAudio.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 55bd2c7957d00db4d8793e78a1e32e4f
+    m_Address: Assets/UI/GameScreenUI/GameCard/GameCard.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 7ce50c80d1c518e4c904d27589db7209
+    m_Address: Assets/UI/GameScreenUI/DetailsPanel/DetailsPanel.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: beb2de083e6609242b9f2be3a8a51e45
+    m_Address: Assets/UI/GameScreenUI/DetailsPanel/GameDetailsCard.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 097a5b9d963840a48a8261e1cb11185f
+    m_Address: Assets/UI/Components/Profile/Profile.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  - m_GUID: 6f90dfb30fb22e24f903133499fc3ec9
+    m_Address: Assets/UI/MainScreenUI/CreateServerModal/CreateServerModal.uxml
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 5ffb8befd34ab544eb4e252b0e2b521d, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 5052747f20b6ecc4283bd60a38a0ecba, type: 2}
+    - {fileID: 11400000, guid: e3b9b267ef830be4ca27576adcc8504e, type: 2}

@@ -1,7 +1,7 @@
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Project.UnityServices.Lobbies;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,11 +10,11 @@ namespace Project.ConnectionManagment {
     public class StartingHostState : ConnectionState {
 
         ConnectionMethod m_ConnectionMethod;
-        uint characterHash;
+        LocalLobby m_LocalLobby;
 
-        public StartingHostState Configure(ConnectionMethod connectionMethod, uint characterHash) {
+        public StartingHostState Configure(ConnectionMethod connectionMethod, LocalLobby localLobby) {
             m_ConnectionMethod = connectionMethod;
-            this.characterHash = characterHash;
+            m_LocalLobby = localLobby;
             return this;
         }
 
@@ -32,22 +32,32 @@ namespace Project.ConnectionManagment {
         async void StartHostFn() {
             Debug.Log($"Starting host");
 
-            await m_ConnectionMethod.SetupHostConnectionAsync(characterHash);
-
-            if (!m_ConnectionManager.NetworkManager.StartHost()) {
-                Debug.LogError("Errror when starting host");
+            try {
+                await m_ConnectionMethod.SetupHostConnectionAsync();
+                Debug.Log($"Created relay allocation with join code {m_LocalLobby.RelayJoinCode}");
+                if (!m_ConnectionManager.NetworkManager.StartHost()) {
+                    StartHostFailed();
+                }
             }
+            catch (Exception e) {
+                Debug.LogError(e);
+                StartHostFailed();
+            }
+
+        }
+
+        void StartHostFailed() {
+            Debug.LogError("Error while starting host");
+            m_ConnectionManager.ChangeState(m_ConnectionManager.m_OfflineState);
         }
 
         public override void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response) {
             var payload = System.Text.Encoding.UTF8.GetString(request.Payload);
             var connectionPayload = JsonUtility.FromJson<ConnectionPayload>(payload);
-
+            Debug.Log("connectionPayload: playerId: " + connectionPayload.playerId + "; playerName: " + connectionPayload.playerName);
             response.Approved = true;
             response.CreatePlayerObject = true;
-            response.PlayerPrefabHash = connectionPayload.characterHash;
             response.Position = Vector3.zero;
-            return;
         }
     }
 }

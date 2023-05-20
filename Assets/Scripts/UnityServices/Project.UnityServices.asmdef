@@ -3,7 +3,10 @@
     "rootNamespace": "",
     "references": [
         "Unity.Services.Authentication",
-        "Unity.Services.Core"
+        "Unity.Services.Core",
+        "Unity.Services.Lobbies",
+        "VContainer",
+        "Project.Infrastructure"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

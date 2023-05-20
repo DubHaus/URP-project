@@ -1,0 +1,100 @@
+.logo {
+	background-color: #5F2BE0;
+	flex-direction: row;
+	padding: 12px 16px;
+	border-radius:0px 0px 10px 10px; 
+}
+
+.logo Label {
+	color: #FFFFFF;
+	font-size: 24px;
+	-unity-font-style: bold;
+}
+
+.logo .logoImage {
+	background-image: url("../Icons/Logo.png");
+	width: 44px;
+	height: 44px;
+	margin-right: 10px;
+}
+
+.searchLine {
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.searchField {
+	width: 300px;
+}
+
+.profileButton {
+	background-color: var(--accent);
+}
+
+.title {
+	color: var(--white);
+	margin-bottom: 30px;
+	margin-top: 50px;
+}
+
+.publicIcon {
+	-unity-background-image-tint-color: var(--accent);
+}
+
+.connectServerButton {
+	background-color: var(--accent);
+}
+
+.footer {
+	position: absolute;
+	bottom: 5%;
+	width: 100%;
+}
+
+.container {
+	height: 100%;
+	position: relative;
+}
+.audioControls {
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	background-color: var(--accent);
+	border-radius: var(--radius);
+	padding: 15px 20px;
+}
+.audioControlsProfile {
+	color:  var(--white);
+	margin-right: 20px;
+	flex-direction: row;
+	align-items: center;
+	overflow: hidden;
+	-unity-text-overflow-position: end;
+	flex-shrink: 1;
+}
+.audioControlsItems {
+	flex-shrink: 0;
+	flex-grow: 0;
+	flex-direction: row;
+}
+
+.audioControlsItems #microButton,
+.audioControlsItems #audioButton {
+	margin-left: 10px;
+}
+
+
+.audioControls #profileImage {
+	background-image: url("../Icons/deaduser.png");
+	width: 40px;
+	height: 40px;
+	margin-right: 10px;
+	flex-shrink: 0;
+	border-radius: 4px;
+}
+
+.footerButtons {
+	flex-direction: row;
+	justify-content: flex-end;
+}

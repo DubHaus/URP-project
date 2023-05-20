@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+	<Style src="ConnectByCodeModalStyles.uss" />
+
+	<ui:VisualElement class="container">
+		<ui:VisualElement class="row">
+			<ui:VisualElement class="col col-6 align-center">
+				<ui:VisualElement class="modalContainer">
+					<ui:VisualElement class="modalHeader">
+						<ui:Label class="h3" text="Connect to server by code" />
+						 <ui:Button name="closeButton" class="iconButton transparent">
+							<ui:VisualElement class="icon icon-lg closeIcon" />
+						</ui:Button>
+					</ui:VisualElement>
+		
+					<ui:TextField name="codeField" label="Server code" text="" />
+		
+					<ui:Button name="connectButton" class="button button-lg" text="Join" />
+
+				</ui:VisualElement>
+			</ui:VisualElement>
+		</ui:VisualElement>
+	</ui:VisualElement>
+</ui:UXML>

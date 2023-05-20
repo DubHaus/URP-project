@@ -1,0 +1,171 @@
+
+:root {
+  --primary: #5F2BE0;
+  --primary-transparent70: rgba(95, 43, 224, 0.7);
+  --primary-transparent30: rgba(95, 43, 224, 0.3);
+  --white: #FFF;
+  --accent: #FF39DF;
+  --radius: 10px;
+  --modal-backdrop: rgba(0, 0, 0, 0.1);
+}
+
+
+TextField {
+	border-width: 2px;
+	border-color: #5F2BE0;
+	background-color: var(--primary-transparent30);
+	border-radius: var(--radius);
+	color: #DDDDDD;
+	position: relative;
+	min-width: 150px;
+	padding: 10px 16px;
+	font-size: 20px;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+}
+
+TextField .unity-base-field__input {
+	background-color: transparent;
+	border-width: 0px;
+	width:100%;
+	height: 100%;
+}
+
+TextField .unity-text-field__label {
+	position:absolute;
+	left:15px;
+	top: 13px;
+	align-items:center;
+	justify-content: center;
+}
+
+TextField:focus {
+	color: var(--white);
+}
+
+TextField:focus .unity-text-field__label {
+	opacity: 0;
+}
+
+.multiline {
+	min-height: 120px;
+}
+
+
+.iconButton {
+	width: 72px;
+	height: 72px;
+	background-color: var(--primary);
+	border-width: 0px;
+	border-radius: var(--radius);
+	align-items: center;
+	justify-content: center;
+	margin:0;
+}
+
+.iconButton-sm {
+	width: 48px;
+	height: 48px;
+	background-color: var(--primary);
+	border-width: 0px;
+	border-radius: var(--radius);
+	align-items: center;
+	justify-content: center;
+}
+
+.transparent {
+	background-color: transparent;
+}
+
+.button {
+	border-width: 0px;
+	padding: 16px 20px;
+	background-color: var(--primary);
+	color: var(--white);
+	font-size: 20px;
+	border-radius: var(--radius);
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	min-width: 150px;
+}
+
+.button .icon {
+	margin-left: 10px;
+}
+
+.button-sm {
+	padding: 10px;
+	font-size: 16px;
+	min-width: 80px;
+}
+
+.button-alt {
+	background-color: var(--accent);
+}
+
+
+.h3, .h4, .h5, .p, .smText, .xsmText, .button Label {
+	margin:0;
+	padding: 0;
+	white-space: normal;
+}
+
+.h3 {
+	font-size: 24px;
+	-unity-font-style: bold;
+}
+
+.h4 {
+	font-size: 20px;
+	-unity-font-style: bold;
+}
+
+.h5 {
+	font-size: 18px;
+	-unity-font-style: bold;
+}
+
+.p {
+	font-size: 16px;
+}
+
+.smText {
+	font-size: 14px;
+	
+}
+
+.xsmText {
+	font-size: 12px;
+}
+
+.bold {
+	-unity-font-style: bold;
+}
+
+.tabs {
+	flex-direction: row;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+.tab {
+	pading: 8px;
+	color: var(--white);
+	border-width: 2px;
+	border-color: var(--accent);
+	background-color: transparent;
+	border-radius: var(--radius);
+	flex-direction: row;
+	align-items:  center;
+}
+
+.tab Label {
+	margin-right: 10px;
+}
+
+.tab.active {
+	border-width: 0px;
+	background-color: var(--accent);
+}

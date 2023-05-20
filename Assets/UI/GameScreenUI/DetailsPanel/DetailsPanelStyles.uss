@@ -1,0 +1,24 @@
+.detailsPanel {
+	background-color: var(--primary);
+	color: var(--white);
+	border-radius: var(--radius);
+	padding: 20px;
+}
+
+.detailsPanel .detailsHeader {
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 30px;
+}
+
+.detailsPanel #list {
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: space-between;
+}
+.detailsPanel GameDetailsCard {
+	margin-bottom: 15px;
+}
+

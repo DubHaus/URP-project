@@ -9,19 +9,15 @@ namespace Project.ConnectionManagment {
     public class ClientConnectingState : ConnectionState {
 
         ConnectionMethod m_ConnectionMethod;
-        string joinCode;
-        uint characterHash;
 
-        public ClientConnectingState Configute(ConnectionMethod method, string joinCode, uint characterHash) {
+        public ClientConnectingState Configure(ConnectionMethod method) {
             m_ConnectionMethod = method;
-            this.joinCode = joinCode;
-            this.characterHash = characterHash;
             return this;
         }
 
         public override async void Enter() {
             try {
-                await m_ConnectionMethod.SetupClientConnectionAsync(joinCode, characterHash);
+                await m_ConnectionMethod.SetupClientConnectionAsync();
                 if (!m_ConnectionManager.NetworkManager.StartClient()) {
                     throw new Exception("NetworkManager StartClient failed");
                 }

@@ -1,0 +1,13 @@
+#container {
+	background-color: var(--primary);
+	color: var(--white);
+	padding: 6px;
+	flex-direction: row;
+	align-items: center;
+	justify-conten: flex-start;
+	border-radius: var(--radius);
+}
+
+#username {
+	margin-left: 10px;
+}

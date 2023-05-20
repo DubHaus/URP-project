@@ -1,0 +1,25 @@
+.createServerModal {
+	margin-top: 10%;
+	padding: 20px 50px;
+	background-color: var(--accent);
+	color: var(--white);
+	border-radius: var(--radius);
+}
+
+#createButton {
+	margin-bottom: 0px;
+	margin-top: 50px;
+	align-self: flex-end;
+}
+
+.createServerModal > * {
+	margin-bottom: 20px;
+}
+
+.modalHeader {
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 50px;
+	width: 100%;
+}

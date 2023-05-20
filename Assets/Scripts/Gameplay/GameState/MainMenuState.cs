@@ -6,6 +6,7 @@ using Project.Gameplay.UI;
 using Project.UnityServices.Auth;
 using VContainer;
 using VContainer.Unity;
+using Project.UI;
 
 namespace Project.Gameplay.GameState {
 
@@ -13,29 +14,14 @@ namespace Project.Gameplay.GameState {
 
         [Inject] AuthenticationServiceFacade m_AuthServiceFacade;
 
-        public override GameState ActiveState { get { return GameState.MainMenu; } }
+        public override GameState ActiveState => GameState.MainMenu;
 
-        [SerializeField] StartScreenUI m_StartScreenUI;
+        [SerializeField] MainScreenManager mainScreenManager;
 
         protected override void Configure(IContainerBuilder builder) {
             base.Configure(builder);
-
-            builder.RegisterComponent(m_StartScreenUI);
-        }
-
-        protected override void Awake() {
-            base.Awake();
-
-            TrySignIn();
-        }
-
-        private async void TrySignIn() {
-            try {
-                await m_AuthServiceFacade.InitializeAndSignInAsync();
-            }
-            catch (Exception err) {
-                Debug.LogError("Sign in failed: " + err);
-            }
+            
+            builder.RegisterComponent(mainScreenManager);
         }
     }
 }

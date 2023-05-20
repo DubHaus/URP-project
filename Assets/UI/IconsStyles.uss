@@ -1,0 +1,65 @@
+.icon {
+	width:24px;
+	height: 24px;
+}
+
+.icon-lg {
+	width:32px;
+	height: 32px;
+}
+
+.searchIcon {
+	background-image: url("./Icons/search.png");
+}
+
+.settingsIcon {
+	background-image: url("./Icons/settings.png");
+}
+
+.exitIcon {
+	background-image: url("./Icons/exit.png");
+}
+
+.publicIcon {
+	background-image: url("./Icons/public.png");
+}
+
+.closeIcon {
+	background-image: url("./Icons/cross.png");
+}
+
+.headsetIcon {
+	background-image: url("./Icons/headset.png");
+}
+
+.headsetOffIcon {
+	background-image: url("./Icons/headset_off.png");
+}
+
+
+.microIcon {
+	background-image: url("./Icons/mic.png");
+}
+
+.microOffIcon {
+	background-image: url("./Icons/mic_off.png");
+}
+
+.playIcon {
+	background-image: url("./Icons/play_circle.png");
+}
+
+.moreIcon {
+	background-image: url("./Icons/more_horiz.png");
+}
+
+.addIcon {
+	background-image: url("./Icons/add.png");
+}
+
+.peopleIcon {
+	background-image: url("./Icons/people.png");
+}
+.gamesIcon {
+	background-image: url("./Icons/games.png");
+}

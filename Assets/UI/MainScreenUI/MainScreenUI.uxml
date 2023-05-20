@@ -1,0 +1,85 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements"
+         xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements"
+         noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="MainScreenStyles.uss"/>
+    <ui:VisualElement name="connectByCodeModal"/>
+    <ui:VisualElement class="container">
+        <ui:VisualElement class="row">
+            <ui:VisualElement class="col col-3">
+                <ui:VisualElement class="logo">
+                    <ui:VisualElement class="logoImage"/>
+                    <ui:Label text="UrpProject" display-tooltip-when-elided="true"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement class="row">
+            <ui:VisualElement class="col col-7 align-end">
+                <ui:VisualElement class="searchLine">
+                    <ui:TextField class="searchField" label="Search server" text="">
+                        <ui:Button name="searchButton" class="searchIcon icon iconButton transparent"/>
+                    </ui:TextField>
+
+                    <ui:Button name="settingsButton" class="iconButton iconButton-lg">
+                        <ui:VisualElement class="icon settingsIcon"/>
+                    </ui:Button>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:ScrollView vertical-scroller-visibility="Hidden">
+
+            <ui:VisualElement class="row">
+                <ui:VisualElement class="col col-4">
+                    <ui:Label text="Your servers" class="h3 title"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement name="lastVisitedServers" class="row"/>
+
+        </ui:ScrollView>
+
+        <ui:VisualElement class="footer">
+            <ui:VisualElement class="row">
+                <ui:VisualElement class="col col-4">
+                    <ui:VisualElement class="audioControls">
+
+                        <ui:VisualElement class="audioControlsProfile">
+                            <ui:VisualElement name="profileImage"/>
+                            <ui:Label name="username" text="default" class="p bold"/>
+                        </ui:VisualElement>
+
+                        <ui:VisualElement class="audioControlsItems">
+
+                            <ui:Button name="audioSettings" class="iconButton iconButton-sm">
+                                <ui:VisualElement class="icon settingsIcon"/>
+                            </ui:Button>
+                            <ui:Button name="microButton" class="iconButton iconButton-sm">
+                                <ui:VisualElement class="icon microIcon"/>
+                            </ui:Button>
+                            <ui:Button name="audioButton" class="iconButton iconButton-sm">
+                                <ui:VisualElement class="icon headsetIcon"/>
+                            </ui:Button>
+
+                        </ui:VisualElement>
+
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+
+                <ui:VisualElement class="col col-6 align-end">
+                    <ui:VisualElement class="footerButtons">
+                        <ui:Button name="connectByCodeButton" class="connectServerButton button button-lg">
+                            <ui:Label text="Connect by code"/>
+                        </ui:Button>
+                        <ui:Button name="createServerButton" class="createServerButton button button-lg">
+                            <ui:Label text="Create your server"/>
+                            <ui:VisualElement class="icon publicIcon"/>
+                        </ui:Button>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>

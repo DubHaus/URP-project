@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="ProfileStyles.uss" />
+    <ui:VisualElement class="profileComponent" >
+        <ui:VisualElement class="initials">
+        </ui:VisualElement>
+         <ui:Label name="name" class="smallText" />
+    </ui:VisualElement>
+</ui:UXML>

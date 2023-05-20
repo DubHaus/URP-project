@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Project.Utils {
 
-    public class ClientPrefabs {
+    public static class ClientPrefabs {
         const string k_ClientGUIDKey = "client_guid";
 
         public static string GetGuid() {

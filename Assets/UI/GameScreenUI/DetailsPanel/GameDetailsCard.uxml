@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="GameDetailsCardStyles.uss" />
+    <ui:VisualElement class="gameDetailsCard">
+        <ui:Label name="name" class="xsmText bold" text="gameName" />
+
+         <ui:VisualElement name="playerList" class="players">
+            <ui:Label name="playersText" class="smText bold" text="Players()" />
+         </ui:VisualElement>
+
+        <ui:VisualElement class="status" >
+            <ui:Label class="xsmText bold" text="Status" />
+            <ui:Label name="status" class="h4" text="Status" />
+         </ui:VisualElement>
+
+        <ui:Button name="play" class="button button-sm button-alt">
+            <ui:Label text="Join the game" />
+		    <ui:VisualElement class="icon playIcon" />
+		</ui:Button>
+
+    </ui:VisualElement>
+</ui:UXML>

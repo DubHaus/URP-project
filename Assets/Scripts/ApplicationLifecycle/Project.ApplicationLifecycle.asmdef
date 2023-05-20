@@ -5,10 +5,12 @@
         "VContainer",
         "VContainer.EnableCodeGen",
         "Unity.Netcode.Runtime",
-        "Project.ConnectionManagment",
+        "Project.ConnectionManagement",
         "Project.Gameplay",
         "Project.UnityServices",
-        "Project.Utils"
+        "Project.Utils",
+        "Project.UI",
+        "Project.Infrastructure"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

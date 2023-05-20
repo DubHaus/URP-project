@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 using VContainer;
-using VContainer.Unity;
 
 namespace Project.ConnectionManagment {
 
-    public class ConnectionPayload {
+    public struct ConnectionPayload {
         public string playerId;
         public string playerName;
-        public uint characterHash;
     };
 
     public class ConnectionManager : MonoBehaviour {
+
+        static public ConnectionManager Instance { get; private set; }
 
         ConnectionState m_CurrentState;
 
@@ -25,7 +25,6 @@ namespace Project.ConnectionManagment {
         public NetworkManager NetworkManager => m_NetworkManager;
 
         public int MaxConnectedPlayer = 8;
-        public string joinCode;
 
         internal readonly OfflineState m_OfflineState = new OfflineState();
         internal readonly ClientConnectingState m_ClientConnectingState = new ClientConnectingState();
@@ -39,7 +38,14 @@ namespace Project.ConnectionManagment {
         }
 
         void Start() {
-            Debug.Log("START CONNECTION MANAGER");
+
+            if (Instance != null) {
+                Debug.LogError("More than one instance of ConnectionManager");
+            }
+            else {
+                Instance = this;
+            }
+
             List<ConnectionState> states = new() { m_OfflineState, m_ClientConnectingState, m_ClientConnectedState, m_ClientConnectedState, m_HostingState, m_StartingHostState, m_SelectCharState };
             foreach (var state in states) {
                 m_Resolver.Inject(state);
@@ -80,6 +86,14 @@ namespace Project.ConnectionManagment {
 
         public void StartClient(string playerName, string joinCode, uint characterHash) {
             m_CurrentState.StartClient(playerName, joinCode, characterHash);
+        }
+
+        public void StartClientLobby(string playerName) {
+            m_CurrentState.StartClientLobby(playerName);
+        }
+
+        public void StartHostLobby(string playerName) {
+            m_CurrentState.StartHostLobby(playerName);
         }
 
         public void StartGame() {

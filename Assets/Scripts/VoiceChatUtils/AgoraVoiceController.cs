@@ -18,13 +18,15 @@ namespace Project.VoiceChatUtils {
         private ILocalSpatialAudioEngine localSpatial;
         internal IRtcEngine RtcEngine;
 
+        public bool isMicroMuted = true;
+        public bool isAudioMuted = true;
+
         void Awake() {
             DontDestroyOnLoad(gameObject);
 
             if (Instance != null && Instance != this) {
-                Debug.LogError("More than one PlayerInputController instance");
-            }
-            else {
+                Debug.LogError("More than one AgoraVoiceController instance");
+            } else {
                 Instance = this;
             }
         }
@@ -77,17 +79,38 @@ namespace Project.VoiceChatUtils {
             RtcEngine.EnableAudio();
             RtcEngine.SetClientRole(CLIENT_ROLE_TYPE.CLIENT_ROLE_BROADCASTER);
             RtcEngine.JoinChannel(_token, _channelName);
+
+            // set default values of micro and audio before joining
+            localSpatial.MuteAllRemoteAudioStreams(isAudioMuted);
+            localSpatial.MuteLocalAudioStream(isMicroMuted);
+
         }
 
         public void UpdateSpatialAudioPosition(Vector3 sourceDistance) {
             float[] position = new float[] { sourceDistance.z, sourceDistance.x, sourceDistance.y };
             float[] forward = new float[] { sourceDistance.z, 0.0f, 0.0f };
             RemoteVoicePositionInfo remotePosInfo = new RemoteVoicePositionInfo(position, forward);
-            localSpatial.UpdateRemotePosition((uint)remoteUid, remotePosInfo);
+            localSpatial.UpdateRemotePosition(remoteUid, remotePosInfo);
         }
 
-        public void Mute(bool mute) {
-            RtcEngine.MuteLocalAudioStream(mute);
+        public void PresetToggleMicro() {
+            isMicroMuted = !isMicroMuted;
+        }
+        public void PresetToggleAudio() {
+            isAudioMuted = !isAudioMuted;
+        }
+
+        public void ToggleMicro() {
+            int success = 0;
+            if (localSpatial.MuteLocalAudioStream(!isMicroMuted) == success) {
+                isMicroMuted = !isMicroMuted;
+            }
+        }
+        public void ToggleAudio() {
+            int success = 0;
+            if (localSpatial.MuteAllRemoteAudioStreams(!isAudioMuted) == success) {
+                isAudioMuted = !isAudioMuted;
+            }
         }
 
         public void Leave() {
@@ -118,6 +141,10 @@ namespace Project.VoiceChatUtils {
         public override void OnUserJoined(RtcConnection connection, uint remoteUid, int elapsed) {
             Debug.Log("Remote user joined " + remoteUid);
             AgoraVoiceController.Instance.remoteUid = remoteUid;
+        }
+
+        public override void OnUserMuteAudio(RtcConnection connection, uint remoteUid, bool muted) {
+            base.OnUserMuteAudio(connection, remoteUid, muted);
         }
 
         public override void OnLeaveChannel(RtcConnection connection, RtcStats stats) {
