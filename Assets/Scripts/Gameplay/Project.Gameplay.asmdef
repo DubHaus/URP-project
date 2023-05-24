@@ -10,8 +10,12 @@
         "Project.VoiceChatUtils",
         "Project.CameraUtils",
         "Unity.TextMeshPro",
-        "Project.UI",
         "Project.Infrastructure",
+        "UnityEngine.UI",
+        "Unity.Addressables",
+        "Unity.ResourceManager",
+        "Unity.Services.Lobbies",
+        "Project.GameSession",
         "Unity.Collections"
     ],
     "includePlatforms": [],

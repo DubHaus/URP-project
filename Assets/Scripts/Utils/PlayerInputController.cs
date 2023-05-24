@@ -79,7 +79,7 @@ namespace Project.Utils.Input {
             // Mouse
             playerInputControls.MouseKeyboard.Scroll.performed += ScrollHandler;
             playerInputControls.MouseKeyboard.Move.performed += MoveHandlerStarts;
-            playerInputControls.MouseKeyboard.Move.canceled+= MoveHandlerEnds;
+            playerInputControls.MouseKeyboard.Move.canceled += MoveHandlerEnds;
             playerInputControls.MouseKeyboard.Rotate.performed += RotateHandlerStarted;
             playerInputControls.MouseKeyboard.Rotate.canceled += RotateHandlerEnds;
             playerInputControls.MouseKeyboard.Interact.performed += InteractHandler;
@@ -102,18 +102,19 @@ namespace Project.Utils.Input {
                 OnRotate?.Invoke(rotation);
             }
 
-            if(isMoving) {
+            if (isMoving) {
                 OnMove?.Invoke(moveVector);
 
-                if(moveVector == Vector2.zero) {
+                if (moveVector == Vector2.zero) {
                     isMoving = false;
                 }
             }
         }
 
         private void PrimarySwipeHandler(InputAction.CallbackContext context) {
-            if (playerInputControls.Touch.PrimaryTouchContact.ReadValue<float>() == 1 &&
-                !EventSystem.current.IsPointerOverGameObject()) {
+            if (playerInputControls.Touch.PrimaryTouchContact.ReadValue<float>() == 1
+                && !EventSystem.current.IsPointerOverGameObject()
+               ) {
                 Vector2 currentTouchPosition = playerInputControls.Touch.PrimaryTouchPosition.ReadValue<Vector2>();
 
                 if (lastPrimaryTouchPosition is Vector2 valueOfLastTouchPosition) {
@@ -193,7 +194,7 @@ namespace Project.Utils.Input {
             OnInteract?.Invoke();
         }
 
-         private void PointerHandler(InputAction.CallbackContext context) {
+        private void PointerHandler(InputAction.CallbackContext context) {
             Vector2 pointerInput = context.ReadValue<Vector2>();
             OnPoint?.Invoke(pointerInput);
         }

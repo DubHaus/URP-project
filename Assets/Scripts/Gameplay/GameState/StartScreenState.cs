@@ -3,10 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Project.Gameplay.UI;
+using Project.GameSession;
 using Project.UnityServices.Auth;
 using VContainer;
-using VContainer.Unity;
-using Project.UI;
 using UnityEngine.SceneManagement;
 
 namespace Project.Gameplay.GameState {

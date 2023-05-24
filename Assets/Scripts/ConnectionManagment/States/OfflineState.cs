@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Project.UnityServices.Lobbies;
 using Project.Utils;
+using Project.VoiceChatUtils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using VContainer;
@@ -12,7 +13,7 @@ namespace Project.ConnectionManagment {
 
         [Inject] LocalLobby m_LocalLobby;
         [Inject] LobbyServiceFacade m_LobbyServiceFacade;
-        [Inject] ProfileManager m_ProfileManager;
+        [Inject] AudioChannel m_audioChannel;
 
         public override void Enter() {
             m_ConnectionManager.NetworkManager.Shutdown();
@@ -36,12 +37,12 @@ namespace Project.ConnectionManagment {
         // }
 
         public override void StartHostLobby(string playerName) {
-            var method = new RelayConnectionMethod(m_LocalLobby, m_LobbyServiceFacade, m_ConnectionManager, m_ProfileManager, playerName);
+            var method = new RelayConnectionMethod(m_LocalLobby, m_LobbyServiceFacade, m_ConnectionManager, m_audioChannel, playerName);
             m_ConnectionManager.ChangeState(m_ConnectionManager.m_StartingHostState.Configure(method, m_LocalLobby));
         }
 
         public override void StartClientLobby(string playerName) {
-            var method = new RelayConnectionMethod(m_LocalLobby, m_LobbyServiceFacade, m_ConnectionManager, m_ProfileManager, playerName);
+            var method = new RelayConnectionMethod(m_LocalLobby, m_LobbyServiceFacade, m_ConnectionManager, m_audioChannel, playerName);
             m_ConnectionManager.ChangeState(m_ConnectionManager.m_ClientConnectingState.Configure(method));
         }
     }

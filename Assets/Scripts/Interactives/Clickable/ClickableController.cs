@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Project.Utils.Input;
-using Project.Gameplay.GameplayObjects.Character;
 using Project.Interactive;
 
 public class ClickableController : MonoBehaviour {

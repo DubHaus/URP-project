@@ -1,14 +1,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Project.GameSession;
 using Project.UnityServices.Lobbies;
+using Project.VoiceChatUtils;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using VContainer;
 
 namespace Project.ConnectionManagment {
     public class StartingHostState : ConnectionState {
-
+        [Inject] GameSessionManager m_GameSessionManager;
+        [Inject] AudioChannel m_AudioChanel;
         ConnectionMethod m_ConnectionMethod;
         LocalLobby m_LocalLobby;
 
@@ -54,7 +58,9 @@ namespace Project.ConnectionManagment {
         public override void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response) {
             var payload = System.Text.Encoding.UTF8.GetString(request.Payload);
             var connectionPayload = JsonUtility.FromJson<ConnectionPayload>(payload);
-            Debug.Log("connectionPayload: playerId: " + connectionPayload.playerId + "; playerName: " + connectionPayload.playerName);
+            
+            m_GameSessionManager.AddPlayer(connectionPayload.playerId, connectionPayload.playerName, connectionPayload.audioId);
+            
             response.Approved = true;
             response.CreatePlayerObject = true;
             response.Position = Vector3.zero;

@@ -3,7 +3,6 @@
     "rootNamespace": "",
     "references": [
         "Project.CameraUtils",
-        "Project.Gameplay",
         "Project.Utils",
         "Unity.Netcode.Runtime"
     ],

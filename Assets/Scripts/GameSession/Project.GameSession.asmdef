@@ -1,0 +1,19 @@
+{
+  "name": "Project.GameSession",
+  "rootNamespace": "",
+  "references": [
+    "Unity.Netcode.Runtime",
+    "Unity.Collections",
+    "VContainer",
+    "Project.VoiceChatUtils"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

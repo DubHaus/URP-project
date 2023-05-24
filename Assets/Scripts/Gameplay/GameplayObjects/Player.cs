@@ -15,32 +15,24 @@ namespace Project.Gameplay.GameplayObjects.Character {
         static public Player LocalInstance { get; private set; }
 
         [SerializeField] float playerInteractionDetectionRange = 5;
-        [SerializeField] private LayerMask layermask;
+        [SerializeField] LayerMask layermask;
 
-        private NavMeshAgent agent;
-        private Vector3 movementVector = Vector3.zero;
-        private bool movementLocked = false;
+        NavMeshAgent agent;
+        Vector3 movementVector = Vector3.zero;
+        bool movementLocked;
 
-        private void Awake() {
+        void Awake() {
             agent = GetComponent<NavMeshAgent>();
         }
 
-        //private void Start() {
-        //    PlayerInputController.Instance.OnClick += OnMove; // TODO Delete when testing online
-        //    PlayerInputController.Instance.OnMove += OnMoveWASD; // TODO Delete when testing online
-        //}
         public override void OnNetworkSpawn() {
             base.OnNetworkSpawn();
-            Debug.Log("Player IsOwner " + IsOwner);
-            Debug.Log("Player IsLocalPlayer " + IsLocalPlayer);
-            Debug.Log("Player IsClient " + IsClient);
-            Debug.Log("Player IsHost " + IsHost);
-            Debug.Log("Player IsServer " + IsServer);
 
             if (IsOwner) {
                 if (LocalInstance != null) {
                     Debug.LogError("More than one local Player instance");
-                } else {
+                }
+                else {
                     LocalInstance = this;
                 }
                 PlayerInputController.Instance.OnClick += OnMove;
@@ -50,12 +42,12 @@ namespace Project.Gameplay.GameplayObjects.Character {
         }
 
 
-        private void Update() {
+        void Update() {
             if (IsOwner && IsWalking()) {
                 FreeCameraSystem.Instance.UpdatePosition(transform.position);
             }
             if (!IsOwner) {
-                AgoraVoiceController.Instance.UpdateSpatialAudioPosition(transform.position);
+                // AgoraVoiceControllerAPIInterface.Instance.UpdateSpatialAudioPosition(transform.position);
             }
         }
 
@@ -129,4 +121,3 @@ namespace Project.Gameplay.GameplayObjects.Character {
         }
     }
 }
-

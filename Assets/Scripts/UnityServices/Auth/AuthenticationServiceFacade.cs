@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Project.GameSession;
 using Project.UnityServices.Lobbies;
 using UnityEngine;
 using Unity.Services.Authentication;
@@ -13,6 +14,10 @@ namespace Project.UnityServices.Auth {
 
         [Inject] LocalUserProfile m_LocalUserProfile;
         [Inject] LocalLobbyUser m_LocalUser;
+        [Inject] GameSessionManager m_GameSessionManager;
+
+
+        public string PlayerId => AuthenticationService.Instance.PlayerInfo.Id;
 
         public async Task InitializeAndSignInAsync() {
 
@@ -33,7 +38,8 @@ namespace Project.UnityServices.Auth {
             }
             catch (Exception e) {
                 var reason = $"{e.Message} ({e.InnerException?.Message})";
-                Debug.LogError("Errror while initializing and authenticating: " + reason);
+                Debug.LogError("Error while initializing and authenticating: " + reason);
+                Debug.LogError(e);
                 throw;
             }
         }

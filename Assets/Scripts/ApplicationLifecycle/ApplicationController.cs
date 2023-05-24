@@ -7,13 +7,12 @@ using VContainer;
 using VContainer.Unity;
 using Unity.Netcode;
 using Project.ConnectionManagment;
-using Project.Gameplay;
+using Project.GameSession;
 using Project.Infrastructure;
 using Project.UnityServices.Auth;
-using Project.Utils;
 using Project.Utils.Input;
-using Project.UI;
 using Project.UnityServices.Lobbies;
+using Project.VoiceChatUtils;
 
 
 namespace Project.ApplicationLifecycle {
@@ -35,7 +34,7 @@ namespace Project.ApplicationLifecycle {
             builder.Register<LocalLobby>(Lifetime.Singleton);
             builder.Register<LocalLobbyUser>(Lifetime.Singleton);
             builder.Register<LocalUserProfile>(Lifetime.Singleton);
-            builder.Register<ProfileManager>(Lifetime.Singleton);
+            builder.Register<AudioChannel>(Lifetime.Singleton);
 
             builder.Register<AuthenticationServiceFacade>(Lifetime.Singleton);
 
@@ -43,11 +42,12 @@ namespace Project.ApplicationLifecycle {
             builder.RegisterEntryPoint<LobbyServiceFacade>(Lifetime.Singleton).AsSelf();
         }
 
-        private void Start() {
+        void Start() {
             m_LobbyServiceFacade = Container.Resolve<LobbyServiceFacade>();
 
             DontDestroyOnLoad(gameObject);
             DontDestroyOnLoad(m_UpdateRunner);
+            DontDestroyOnLoad(m_GameSessionManager);
             Application.targetFrameRate = 120;
             SceneManager.LoadScene("StartScreen");
         }

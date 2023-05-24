@@ -11,8 +11,8 @@
         "Unity.Networking.Transport",
         "Project.VoiceChatUtils",
         "Project.UnityServices",
-        "Project.Gameplay",
-        "VContainer"
+        "VContainer",
+        "Project.GameSession"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

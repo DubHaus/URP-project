@@ -5,8 +5,10 @@
         "Unity.Services.Authentication",
         "Unity.Services.Core",
         "Unity.Services.Lobbies",
+        "Unity.Netcode.Runtime",
         "VContainer",
-        "Project.Infrastructure"
+        "Project.Infrastructure",
+        "Project.GameSession"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

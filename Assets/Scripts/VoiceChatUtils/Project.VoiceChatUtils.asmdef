@@ -2,7 +2,8 @@
     "name": "Project.VoiceChatUtils",
     "rootNamespace": "",
     "references": [
-        "Agora"
+        "Agora",
+        "VContainer"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

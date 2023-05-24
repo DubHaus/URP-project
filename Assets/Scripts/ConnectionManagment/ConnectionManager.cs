@@ -8,6 +8,7 @@ namespace Project.ConnectionManagment {
 
     public struct ConnectionPayload {
         public string playerId;
+        public uint audioId; // id for audio chat
         public string playerName;
     };
 

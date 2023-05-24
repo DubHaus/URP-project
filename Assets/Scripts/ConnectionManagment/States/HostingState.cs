@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Project.Gameplay;
+using Project.GameSession;
 using Project.UnityServices.Lobbies;
 using Project.VoiceChatUtils;
 using Unity.Netcode;
@@ -15,10 +15,10 @@ namespace Project.ConnectionManagment {
         [Inject] LocalLobby m_LocalLobby;
         [Inject] LocalLobbyUser m_LocalUser;
         [Inject] GameSessionManager m_GameSessionManager;
+        [Inject] AudioChannel m_AudioChannel;
         public override void Enter() {
             m_ConnectionManager.NetworkManager.SceneManager.LoadScene("GLDScene", LoadSceneMode.Single);
-            //m_ConnectionManager.NetworkManager.SceneManager.LoadScene("MainScene", LoadSceneMode.Single);
-            AgoraVoiceController.Instance.Join();
+            m_AudioChannel.JoinChannel();
         }
 
         public override void OnClientConnected(ulong clientId) {
@@ -26,15 +26,15 @@ namespace Project.ConnectionManagment {
         }
 
         public override void Exit() {
-            AgoraVoiceController.Instance.Leave();
+            m_AudioChannel.LeaveChannel();
         }
 
         public override void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response) {
             var payload = System.Text.Encoding.UTF8.GetString(request.Payload);
             var connectionPayload = JsonUtility.FromJson<ConnectionPayload>(payload);
-            
-            m_GameSessionManager.AddPlayer(new GameSessionPlayer(connectionPayload.playerId, connectionPayload.playerName));
-            
+
+            m_GameSessionManager.AddPlayer(connectionPayload.playerId, connectionPayload.playerName, connectionPayload.audioId);
+
             response.Approved = true;
             response.CreatePlayerObject = true;
             response.Position = new Vector3(0, 3, 0);

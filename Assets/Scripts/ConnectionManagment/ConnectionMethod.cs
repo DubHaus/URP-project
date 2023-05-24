@@ -8,42 +8,47 @@ using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using Project.Utils;
 using Project.UnityServices.Lobbies;
+using Project.VoiceChatUtils;
 
 namespace Project.ConnectionManagment {
 
     public abstract class ConnectionMethod {
         protected ConnectionManager m_ConnectionManager;
-        readonly ProfileManager m_ProfileManager;
         protected readonly string m_PlayerName;
+        public ConnectionPayload payload;
 
         public abstract Task SetupHostConnectionAsync();
         public abstract Task SetupClientConnectionAsync();
 
-        public ConnectionMethod(ConnectionManager connectionManager, ProfileManager profileManager, string playerName) {
+        public ConnectionMethod(ConnectionManager connectionManager, string playerName) {
             m_ConnectionManager = connectionManager;
             m_PlayerName = playerName;
-            m_ProfileManager = profileManager;
         }
 
-        protected void SetConnectionPayload(string playerId, string playerName) {
-            var payload = JsonUtility.ToJson(
-                new ConnectionPayload() {
-                    playerId = playerId,
-                    playerName = playerName
-                }
-            );
+        protected void SetConnectionPayload(string playerId, uint audioId, string playerName) {
+            this.payload = new ConnectionPayload() {
+                playerId = playerId,
+                playerName = playerName,
+                audioId = audioId,
+            };
 
-            var payloadBytes = System.Text.Encoding.UTF8.GetBytes(payload);
+            var payloadBytes = System.Text.Encoding.UTF8.GetBytes(
+                JsonUtility.ToJson(
+                    this.payload
+                ));
 
             m_ConnectionManager.NetworkManager.NetworkConfig.ConnectionData = payloadBytes;
         }
 
         protected string GetPlayerId() {
-            if (Unity.Services.Core.UnityServices.State != ServicesInitializationState.Initialized) {
-                return ClientPrefabs.GetGuid() + m_ProfileManager.Profile;
+            // if (Unity.Services.Core.UnityServices.State != ServicesInitializationState.Initialized) {
+            //     return ClientPrefabs.GetGuid() + m_ProfileManager.Profile;
+            // }
+            if (!AuthenticationService.Instance.IsSignedIn) {
+                Debug.LogError("Users is not authorized!");
             }
-
-            return AuthenticationService.Instance.IsSignedIn ? AuthenticationService.Instance.PlayerId : ClientPrefabs.GetGuid();
+            return AuthenticationService.Instance.PlayerId;
+            // return AuthenticationService.Instance.IsSignedIn ? AuthenticationService.Instance.PlayerId : ClientPrefabs.GetGuid();
         }
     }
 
@@ -51,17 +56,19 @@ namespace Project.ConnectionManagment {
 
         LocalLobby m_LocalLobby;
         LobbyServiceFacade m_LobbyServiceFacade;
+        AudioChannel m_AudioChannel;
 
-        public RelayConnectionMethod(LocalLobby localLobby, LobbyServiceFacade lobbyServiceFacade, ConnectionManager connectionManager, ProfileManager profileManager, string playerName)
-            : base(connectionManager, profileManager, playerName) {
+        public RelayConnectionMethod(LocalLobby localLobby, LobbyServiceFacade lobbyServiceFacade, ConnectionManager connectionManager, AudioChannel audioChannel, string playerName)
+            : base(connectionManager, playerName) {
             m_LocalLobby = localLobby;
             m_LobbyServiceFacade = lobbyServiceFacade;
+            m_AudioChannel = audioChannel;
         }
 
         public override async Task SetupClientConnectionAsync() {
             Debug.Log("Setting up Unity Relay client");
             Debug.Log("GetPlayerId " + GetPlayerId());
-            SetConnectionPayload(GetPlayerId(), m_PlayerName);
+            SetConnectionPayload(GetPlayerId(), m_AudioChannel.LocalUser.ID, m_PlayerName);
 
             Debug.Log($"Setting Unity Relay client with join code {m_LocalLobby.RelayJoinCode}");
 
@@ -75,7 +82,7 @@ namespace Project.ConnectionManagment {
         public override async Task SetupHostConnectionAsync() {
             Debug.Log("Setting up Unity Relay host");
             Debug.Log("GetPlayerId " + GetPlayerId());
-            SetConnectionPayload(GetPlayerId(), m_PlayerName);
+            SetConnectionPayload(GetPlayerId(), m_AudioChannel.LocalUser.ID, m_PlayerName);
 
             Allocation hostAllocation = await RelayService.Instance.CreateAllocationAsync(m_ConnectionManager.MaxConnectedPlayer, region: null);
             var joinCode = await RelayService.Instance.GetJoinCodeAsync(hostAllocation.AllocationId);

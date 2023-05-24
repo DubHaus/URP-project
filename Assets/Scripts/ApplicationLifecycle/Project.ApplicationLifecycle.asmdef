@@ -9,8 +9,9 @@
         "Project.Gameplay",
         "Project.UnityServices",
         "Project.Utils",
-        "Project.UI",
-        "Project.Infrastructure"
+        "Project.Infrastructure",
+        "Project.GameSession",
+        "Project.VoiceChatUtils"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
